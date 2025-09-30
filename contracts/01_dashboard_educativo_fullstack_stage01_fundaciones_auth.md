@@ -403,12 +403,12 @@ GET /api/v1/user/profile
 ### Gestión de Puertos y Recursos
 
 #### Asignación de Puertos por Ambiente
-| Servicio | Desarrollo | Staging | Producción | Descripción |
-|----------|------------|---------|------------|-------------|
-| Frontend | 3000 | 3001 | 80/443 | Next.js Development |
-| Backend | 8000 | 8001 | 443 | FastAPI Development |
-| Database | 5432 | 5433 | 5432 | PostgreSQL |
-| Redis | 6379 | 6380 | 6379 | Cache (Opcional) |
+| Servicio | Desarrollo | Producción | Descripción |
+|----------|------------|------------|-------------|
+| Frontend | 3000 | 80/443 | Next.js Development |
+| Backend | 8000 | 443 | FastAPI Development |
+| Database | 5432 | 5432 | PostgreSQL |
+| Redis | 6379 | 6379 | Cache (Opcional) |
 
 #### Variables de Entorno por Ambiente
 
@@ -433,29 +433,6 @@ LOG_LEVEL=debug
 GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/oauth/callback
-```
-
-**Staging (.env.staging)**
-```env
-# Ambiente
-ENVIRONMENT=staging
-
-# Puertos
-FRONTEND_PORT=3001
-BACKEND_PORT=8001
-DATABASE_PORT=5433
-
-# Backend
-PORT=8001
-JWT_SECRET=staging-secret-key
-JWT_EXPIRES_IN=12h
-CORS_ORIGIN=http://localhost:3001
-LOG_LEVEL=info
-
-# OAuth
-GOOGLE_CLIENT_ID=your-staging-google-client-id.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=your-staging-google-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:3001/oauth/callback
 ```
 
 **Producción (.env.production)**
@@ -569,7 +546,9 @@ done
 
 ### Comandos de Desarrollo
 
-#### Comandos Básicos
+#### Comandos por Ambiente
+
+**Desarrollo**
 ```bash
 # Verificar puertos disponibles
 ./scripts/check-ports.sh
@@ -589,8 +568,24 @@ python -m pytest --watch                # Tests en modo watch
 # Frontend manual
 cd frontend
 npm run dev -- --port 3000  # Next.js en modo desarrollo
-npm run build        # Build de producción
 npm run test         # Ejecutar tests con Vitest
+
+# Docker Compose desarrollo
+docker-compose -f docker-compose.dev.yml up
+```
+
+**Producción**
+```bash
+# Build de producción
+cd frontend
+npm run build
+
+# Backend producción
+cd backend
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# Docker Compose producción
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 #### Docker Compose (docker-compose.yml)
@@ -624,6 +619,47 @@ services:
       - POSTGRES_DB=educational_dashboard
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
+```
+
+#### Docker Compose por Ambiente
+
+**Desarrollo (docker-compose.dev.yml)**
+```yaml
+version: '3.8'
+services:
+  frontend:
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+  
+  backend:
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - CORS_ORIGIN=http://localhost:3000
+      - LOG_LEVEL=debug
+```
+
+**Producción (docker-compose.prod.yml)**
+```yaml
+version: '3.8'
+services:
+  frontend:
+    ports:
+      - "80:3000"
+      - "443:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://your-domain.com/api/v1
+  
+  backend:
+    ports:
+      - "443:8000"
+    environment:
+      - PORT=8000
+      - CORS_ORIGIN=https://your-domain.com
+      - LOG_LEVEL=warning
 ```
 
 ##############################################
@@ -673,20 +709,16 @@ services:
 ### Principios de Asignación de Puertos
 
 #### 1. **Puertos Estándar por Servicio**
-- **Frontend**: 3000, 3001, 3002... (rango 3000-3099)
-- **Backend**: 8000, 8001, 8002... (rango 8000-8099)
-- **Database**: 5432, 5433, 5434... (rango 5432-5439)
-- **Cache**: 6379, 6380, 6381... (rango 6379-6389)
+- **Frontend**: 3000 (desarrollo), 80/443 (producción)
+- **Backend**: 8000 (desarrollo), 443 (producción)
+- **Database**: 5432 (ambos ambientes)
+- **Cache**: 6379 (ambos ambientes)
 
 #### 2. **Configuración por Ambiente**
 ```bash
 # Desarrollo: Puertos estándar
 FRONTEND_PORT=3000
 BACKEND_PORT=8000
-
-# Staging: Puertos +1
-FRONTEND_PORT=3001
-BACKEND_PORT=8001
 
 # Producción: Puertos estándar web
 FRONTEND_PORT=80/443
@@ -709,11 +741,12 @@ BACKEND_PORT=443
 
 | Beneficio | Descripción |
 |-----------|-------------|
+| **Simplicidad** | Solo dos ambientes (dev/prod) para mantener |
 | **Consistencia** | Mismos puertos en todo el equipo |
-| **Flexibilidad** | Fácil cambio entre entornos |
+| **Flexibilidad** | Fácil cambio entre desarrollo y producción |
 | **Detección Temprana** | Conflictos identificados antes del desarrollo |
-| **Escalabilidad** | Fácil agregar nuevos servicios |
 | **Mantenibilidad** | Configuración centralizada y documentada |
+| **Claridad** | Menos confusión entre ambientes intermedios |
 
 ### Troubleshooting Común
 
@@ -760,5 +793,6 @@ curl http://localhost:3000
 8. **Idioma Único**: Inglés como idioma base con estructura para expansión futura
 9. **Autenticación Dual**: Soportar tanto JWT como OAuth de manera coherente
 10. **Gestión de Puertos**: Implementar mejores prácticas de asignación y verificación
+11. **Simplicidad de Ambientes**: Mantener solo desarrollo y producción para reducir complejidad
 
-Este stage establece las fundaciones sólidas, el sistema de autenticación completo y las mejores prácticas de gestión de recursos para el resto del proyecto.
+Este stage establece las fundaciones sólidas, el sistema de autenticación completo y las mejores prácticas de gestión de recursos con una configuración simplificada de dos ambientes para el resto del proyecto.
