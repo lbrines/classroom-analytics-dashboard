@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: educational-dashboard-backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=development
+      - PORT=8000
+      - JWT_SECRET=${JWT_SECRET:-dev-secret-key-change-in-production}
+      - JWT_EXPIRES_IN=24h
+      - CORS_ORIGIN=http://localhost:${FRONTEND_PORT:-3000}
+      - LOG_LEVEL=debug
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REDIRECT_URI=http://localhost:${FRONTEND_PORT:-3000}/oauth/callback
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    command: python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: educational-dashboard-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:${BACKEND_PORT:-8000}/api/v1
+      - NEXT_PUBLIC_APP_NAME=Educational Dashboard
+      - NEXT_PUBLIC_VERSION=1.0.0
+      - NEXT_PUBLIC_DEFAULT_LOCALE=en
+      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev -- --port 3000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: educational-dashboard-network
+
