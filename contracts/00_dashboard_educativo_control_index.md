@@ -5,24 +5,22 @@
 - **Tipo**: Sistema de Gestión Educativa Full-Stack
 - **Autor**: Sistema de Contratos LLM
 - **Fecha**: 2025-09-30
-- **Propósito**: Índice y guía de navegación para LLMs y desarrolladores
 - **Versión**: 2.0 (Consolidación de etapas)
 
-## 📚 Índice de Contratos
+## Índice de Contratos
 
 | # | Archivo | Descripción | Componente | Etapa |
-|---|---------|-------------|------------|-------|
-| 01 | `01_dashboard_educativo_backend_base.md` | Contrato base del backend con FastAPI | Backend | Base |
-| 02 | `01_dashboard_educativo_fullstack_stage01_fundaciones_auth.md` | Fundaciones del sistema y autenticación | Full-Stack | Stage 1 |
-| 03 | `02_dashboard_educativo_fullstack_stage02_google_dashboards.md` | Integración Google y dashboards básicos | Full-Stack | Stage 2 |
-| 04 | `03_dashboard_educativo_fullstack_stage03_visualizacion_notificaciones.md` | Visualización avanzada y notificaciones | Full-Stack | Stage 3 |
-| 05 | `04_dashboard_educativo_fullstack_stage04_integracion_testing.md` | Integración completa, testing y CI/CD | Full-Stack | Stage 4 |
+|---|---------|-------------|------------|---------|
+| 01 | `01_dashboard_educativo_fullstack_stage01_fundaciones_auth.md` | Fundaciones del sistema y autenticación | Full-Stack | Stage 1 |
+| 02 | `02_dashboard_educativo_fullstack_stage02_google_dashboards.md` | Integración Google y dashboards básicos | Full-Stack | Stage 2 |
+| 03 | `03_dashboard_educativo_fullstack_stage03_visualizacion_notificaciones.md` | Visualización avanzada y notificaciones | Full-Stack | Stage 3 |
+| 04 | `04_dashboard_educativo_fullstack_stage04_integracion_testing.md` | Integración completa, testing y CI/CD | Full-Stack | Stage 4 |
 
-## 🎯 Mapeo de Funcionalidades por Stage
+## Mapeo de Funcionalidades por Stage
 
 ### Stage 1: Fundaciones y Autenticación
 - **Backend**: FastAPI base, autenticación JWT, OAuth 2.0, dataset mock
-- **Frontend**: Next.js 15, login, layout responsivo, dashboard básico, i18n (inglés), flujo OAuth
+{{ ... }}
 - **Objetivo**: Base arquitectónica sólida con autenticación completa
 
 ### Stage 2: Integración Google y Dashboards Básicos
@@ -60,15 +58,14 @@
 
 ### Orden de Lectura Recomendado
 1. **Leer este archivo primero** (00) para contexto general
-2. **Contrato base** (01) para arquitectura backend
-3. **Stages secuencialmente** (01-04) para desarrollo progresivo
+2. **Stages secuencialmente** (01-04) para desarrollo progresivo
 
 ### Puntos Clave a Considerar
 - **Modo Dual**: Sistema funciona con Google Classroom o datos mock
 - **Roles**: admin, coordinador, docente, estudiante
-- **TDD**: Testing desde el inicio en todos los stages
+- **TDD First**: Test-Driven Development con tests escritos antes que el código
 - **Responsive**: Diseño móvil-first en todo el frontend
-- **Accesibilidad**: WCAG 2.1 AA integrada en Stage 4
+- **Accesibilidad**: WCAG 2.2 AA integrada en Stage 4
 - **Idioma**: Inglés como idioma único de la interfaz y datos
 
 ### Contexto del Proyecto
@@ -129,10 +126,12 @@ npm run test
 - [ ] Dashboards por rol implementados
 
 ### Calidad
-- [ ] Cobertura de tests ≥70%
+- [ ] Cobertura de tests ≥70% (incluidos tests específicos para escenarios de error)
 - [ ] Linting y formateo automático
-- [ ] Documentación actualizada
+- [ ] Documentación actualizada (incluyendo estrategias de manejo de errores)
 - [ ] Performance optimizada
+- [ ] Catálogo de mensajes de error amigables
+- [ ] Estrategias de recuperación ante fallos
 
 ### Accesibilidad
 - [ ] WCAG 2.1 AA compliance
@@ -140,24 +139,27 @@ npm run test
 - [ ] Screen reader compatible
 - [ ] Contraste adecuado
 
-## 🔄 Flujo de Implementación
+## 🔄 Flujo de Implementación con TDD
 
-1. **Implementar Stage 1** → Fundaciones y autenticación
-2. **Testing Stage 1** → Validar fundaciones y autenticación
-3. **Implementar Stage 2** → Google y dashboards básicos
-4. **Testing Stage 2** → Validar integración y visualización
-5. **Implementar Stage 3** → Visualización avanzada y notificaciones
-6. **Testing Stage 3** → Validar experiencia de usuario
-7. **Implementar Stage 4** → Integración completa y calidad
-8. **Testing final** → Validación completa
+1. **Escribir tests Stage 1** → Tests para fundaciones y autenticación
+2. **Implementar Stage 1** → Código para pasar tests de fundaciones y autenticación
+3. **Escribir tests Stage 2** → Tests para Google y dashboards básicos
+4. **Implementar Stage 2** → Código para pasar tests de integración y visualización
+5. **Escribir tests Stage 3** → Tests para visualización avanzada y notificaciones
+6. **Implementar Stage 3** → Código para pasar tests de experiencia de usuario
+7. **Escribir tests Stage 4** → Tests para integración completa y calidad
+8. **Implementar Stage 4** → Código para pasar tests finales
 
 ## 📝 Notas para Desarrolladores
 
 - **Commits atómicos**: Un commit por funcionalidad
 - **Mensajes descriptivos**: Usar formato convencional
-- **Testing primero**: TDD en todos los stages
-- **Documentación**: Mantener actualizada
-- **Performance**: Optimizar desde el inicio
+- **TDD Estricto**: Seguir ciclo red-green-refactor (tests fallando → tests pasando → refactorización)
+- **Commits TDD**: Separar commits de tests, implementación y refactorización
+- **Documentación**: Mantener actualizada y usar tests como documentación viva
+- **Performance**: Optimizar desde el inicio con tests de performance
+- **Seguridad OAuth**: Implementar PKCE, rotación de tokens, validación de estado y limitación de permisos
+- **Manejo de Errores**: Sistema completo con mensajes amigables, tipado de errores y estrategias de recuperación
 
 ---
 

@@ -28,18 +28,34 @@
 - Implementar sistema de internacionalización (i18n) con inglés como idioma base
 
 ### Backend - Autenticación Avanzada
-- Implementar autenticación OAuth 2.0 con Google en Python
-- Configurar manejo de tokens de acceso y refresh tokens
-- Implementar middleware de autenticación OAuth
-- Crear endpoints para flujo OAuth completo
-- Configurar seguridad y validación de tokens
+- Implementar autenticación OAuth 2.0 con Google en Python usando HTTPS obligatorio
+- Configurar manejo de tokens de acceso y refresh tokens con rotación periódica
+- Implementar middleware de autenticación OAuth con validación estricta
+- Crear endpoints para flujo OAuth completo con PKCE (Proof Key for Code Exchange)
+- Configurar seguridad y validación de tokens con restricción de privilegios
+- Implementar limitación de permisos (scopes) siguiendo principio de menor privilegio
+- Crear mecanismos anti-replay para prevenir reutilización de tokens
 
 ### Frontend - Flujo OAuth
-- Implementar flujo OAuth en frontend con Next.js y React Query
-- Crear componentes para autenticación OAuth
-- Manejar estados de autenticación múltiples (JWT y OAuth)
-- Implementar callback de OAuth
-- Crear interfaz para gestión de cuentas y sesiones
+- Implementar flujo OAuth en frontend con Next.js y React Query usando Authorization Code Flow
+- Crear componentes para autenticación OAuth con generación segura de PKCE
+- Manejar estados de autenticación múltiples (JWT y OAuth) con almacenamiento seguro
+- Implementar callback de OAuth con validación de estado para prevenir CSRF
+- Crear interfaz para gestión de cuentas y sesiones con opciones de revocación
+- Implementar manejo de errores OAuth con mensajes amigables y logging seguro
+
+##############################################
+## Metodología TDD
+
+Este proyecto sigue la metodología Test-Driven Development (TDD), que consiste en:
+
+1. **Escribir tests primero**: Crear tests que definan el comportamiento esperado antes de implementar el código.
+2. **Verificar que los tests fallen**: Ejecutar los tests para confirmar que fallan correctamente.
+3. **Implementar código mínimo**: Escribir el código necesario para que los tests pasen.
+4. **Verificar que los tests pasen**: Ejecutar los tests para confirmar su éxito.
+5. **Refactorizar**: Mejorar el código manteniendo los tests exitosos.
+
+Cada componente y funcionalidad debe seguir este ciclo de desarrollo.
 
 ##############################################
 ## Árbol de Directorios Completo
@@ -157,7 +173,7 @@
 
 ### Backend - Funcionalidades Core
 1. **Servidor Base**
-   - Express.js con TypeScript
+   - FastAPI con Python
    - Middleware de CORS, logging y manejo de errores
    - Configuración de entorno con dotenv
    - Health check endpoint
@@ -166,14 +182,15 @@
    - JWT tokens para sesiones
    - OAuth 2.0 con Google
    - Middleware de autenticación
-   - Roles básicos: admin, docente, estudiante
+   - Roles básicos: admin, coordinador, docente, estudiante
    - Endpoints: login, refresh, logout, oauth
 
 3. **API REST Fundacional**
-   - Envelope estándar `{data, meta, error?}`
-   - Códigos HTTP apropiados
-   - Validación de entrada
-   - Manejo centralizado de errores
+   - Envelope estándar `{data, meta, error?}` con estructura de errores tipados
+   - Códigos HTTP apropiados y consistentes
+   - Validación de entrada con feedback detallado
+   - Manejo centralizado de errores con sanitización de información sensible
+   - Catálogo de mensajes de error amigables para usuarios
 
 4. **Dataset Mock Inicial**
    - Usuarios de prueba (admin, docentes, estudiantes)
@@ -184,7 +201,7 @@
 1. **Configuración Base**
    - Next.js 15 con App Router
    - TypeScript estricto
-   - Bootstrap 5.3 integrado
+   - Tailwind CSS integrado
    - Configuración de ESLint y Prettier
 
 2. **Sistema de Autenticación Completo**
@@ -255,13 +272,10 @@ GET /api/v1/user/profile
   "error": {
     "code": "AUTH_INVALID_CREDENTIALS",
     "message": "Invalid credentials",
-    "details": {}
-  },
-  "meta": {
-    "timestamp": "2025-09-25T13:15:00Z",
-    "version": "1.0.0",
-    "requestId": "uuid"
-  }
+    "userMessage": "The username or password you entered is incorrect",
+    "details": {
+      "username": "The username you entered is incorrect",
+      "password": "The password you entered is incorrect"
 }
 ```
 
@@ -276,7 +290,7 @@ GET /api/v1/user/profile
       "id": "admin-001",
       "email": "admin@educational.dashboard",
       "password": "admin123",
-      "role": "administrator",
+      "role": "admin",
       "name": "System Administrator",
       "active": true
     },
@@ -325,33 +339,55 @@ GET /api/v1/user/profile
 ```
 
 ##############################################
-## Testing del Stage 1
+## Testing del Stage 1 con TDD
+
+### Enfoque TDD para Backend
+1. **Tests Unitarios Iniciales**
+   - Escribir tests para cada servicio antes de su implementación
+   - Definir comportamientos esperados mediante assertions claras
+   - Crear mocks para dependencias externas
+
+2. **Tests de Integración Iniciales**
+   - Escribir tests para endpoints antes de implementarlos
+   - Definir contratos de API mediante tests
+   - Establecer casos de éxito y error esperados
 
 ### Backend Tests
-1. **Tests Unitarios**
-   - `auth.service.test.ts`: Validar JWT y autenticación
-   - `oauth.service.test.ts`: Validar flujo OAuth
-   - `mock.service.test.ts`: Validar datos mock
-   - `response.helper.test.ts`: Validar envelope de respuestas
+1. **Tests Unitarios Iniciales**
+   - `auth_service.test.py`: Tests para validación JWT antes de implementación
+   - `oauth_service.test.py`: Tests para flujo OAuth antes de implementación
+   - `mock_service.test.py`: Tests para validación de datos mock antes de creación
+   - `response_helper.test.py`: Tests para envelope de respuestas antes de implementación
 
-2. **Tests de Integración**
-   - `auth.integration.test.ts`: Endpoints de autenticación JWT
-   - `oauth.integration.test.ts`: Endpoints de OAuth
-   - `health.integration.test.ts`: Health check
-   - `middleware.integration.test.ts`: Middleware de auth
+2. **Tests de Integración Iniciales**
+   - `auth.integration.test.py`: Tests para endpoints de autenticación JWT
+   - `oauth.integration.test.py`: Tests para endpoints de OAuth
+   - `health.integration.test.py`: Tests para health check
+   - `middleware.integration.test.py`: Tests para middleware de auth
+
+### Enfoque TDD para Frontend
+1. **Tests de Componentes Iniciales**
+   - Escribir tests para cada componente UI antes de implementarlo
+   - Definir props, eventos y comportamiento esperado
+   - Crear mocks para servicios y contextos
+
+2. **Tests de Hooks Iniciales**
+   - Escribir tests para hooks personalizados antes de implementarlos
+   - Definir comportamiento esperado para diferentes estados
+   - Simular eventos y cambios de estado
 
 ### Frontend Tests
-1. **Tests de Componentes**
-   - `LoginForm.test.tsx`: Formulario de login
-   - `OAuthButton.test.tsx`: Botón de OAuth
-   - `AuthGuard.test.tsx`: Protección de rutas
-   - `Layout.test.tsx`: Layout principal
-   - `TranslatedText.test.tsx`: Componente de texto traducido
+1. **Tests de Componentes Iniciales**
+   - `LoginForm.test.tsx`: Tests para formulario de login antes de implementación
+   - `OAuthButton.test.tsx`: Tests para botón de OAuth antes de implementación
+   - `AuthGuard.test.tsx`: Tests para protección de rutas antes de implementación
+   - `Layout.test.tsx`: Tests para layout principal antes de implementación
+   - `TranslatedText.test.tsx`: Tests para componente de texto traducido antes de implementación
 
-2. **Tests de Hooks**
-   - `useAuth.test.ts`: Hook de autenticación JWT
-   - `useOAuth.test.ts`: Hook de autenticación OAuth
-   - `useTranslation.test.ts`: Hook de traducciones
+2. **Tests de Hooks Iniciales**
+   - `useAuth.test.ts`: Tests para hook de autenticación JWT antes de implementación
+   - `useOAuth.test.ts`: Tests para hook de autenticación OAuth antes de implementación
+   - `useTranslation.test.ts`: Tests para hook de traducciones antes de implementación
 
 ##############################################
 ## Criterios de Aceptación (DoD) - Stage 1
@@ -397,6 +433,13 @@ GET /api/v1/user/profile
 - [ ] Scripts de verificación de puertos funcionando
 - [ ] Configuración de Docker Compose operativa
 
+### Criterios TDD
+- [ ] Tests unitarios escritos antes de la implementación de cada componente
+- [ ] Tests de integración escritos antes de conectar componentes
+- [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- [ ] Documentación de decisiones de diseño basadas en tests
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥70%)
+
 ##############################################
 ## Configuración de Desarrollo
 
@@ -433,6 +476,13 @@ LOG_LEVEL=debug
 GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:3000/oauth/callback
+GOOGLE_SCOPES=profile,email,openid
+OAUTH_PKCE_ENABLED=true
+OAUTH_STATE_SECRET=your-random-state-secret
+OAUTH_REFRESH_TOKEN_ROTATION_ENABLED=true
+OAUTH_REFRESH_TOKEN_EXPIRY_DAYS=30
+OAUTH_ACCESS_TOKEN_EXPIRY_MINUTES=15
+OAUTH_ENFORCE_HTTPS=true
 ```
 
 **Producción (.env.production)**
@@ -456,6 +506,13 @@ LOG_LEVEL=warning
 GOOGLE_CLIENT_ID=your-production-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-production-google-client-secret
 GOOGLE_REDIRECT_URI=https://your-domain.com/oauth/callback
+GOOGLE_SCOPES=profile,email,openid
+OAUTH_PKCE_ENABLED=true
+OAUTH_STATE_SECRET=your-production-random-state-secret
+OAUTH_REFRESH_TOKEN_ROTATION_ENABLED=true
+OAUTH_REFRESH_TOKEN_EXPIRY_DAYS=15
+OAUTH_ACCESS_TOKEN_EXPIRY_MINUTES=10
+OAUTH_ENFORCE_HTTPS=true
 ```
 
 #### Frontend (.env.local)
@@ -468,6 +525,10 @@ NEXT_PUBLIC_DEFAULT_LOCALE=en
 
 # OAuth
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+NEXT_PUBLIC_OAUTH_PKCE_ENABLED=true
+NEXT_PUBLIC_OAUTH_ERROR_MESSAGES_ENABLED=true
+NEXT_PUBLIC_OAUTH_SCOPES=profile,email,openid
+NEXT_PUBLIC_ERROR_REPORTING_LEVEL=user-friendly
 ```
 
 ### Scripts de Gestión de Puertos
@@ -544,6 +605,35 @@ while true; do
 done
 ```
 
+#### Scripts de Soporte TDD (scripts/tdd-support.sh)
+```bash
+#!/bin/bash
+# Scripts para facilitar el desarrollo TDD
+
+# Ejecutar tests en modo watch
+tdd_watch() {
+  cd backend && python -m pytest --watch
+}
+
+# Verificar que los tests fallen antes de implementación
+tdd_verify_fail() {
+  cd backend && python -m pytest --new-only
+}
+
+# Verificar cobertura de tests
+tdd_coverage() {
+  cd backend && python -m pytest --cov=app
+}
+
+# Ejecutar ciclo TDD completo
+tdd_cycle() {
+  tdd_verify_fail && echo "✅ Tests fallan correctamente" || exit 1
+  # Implementar código...
+  tdd_watch && echo "✅ Tests pasan después de implementación" || exit 1
+  tdd_coverage && echo "✅ Cobertura verificada" || exit 1
+}
+```
+
 ### Comandos de Desarrollo
 
 #### Comandos por Ambiente
@@ -612,13 +702,13 @@ services:
       - database
   
   database:
-    image: postgres:15
+    image: mongo:6.0
     ports:
-      - "${DATABASE_PORT:-5432}:5432"
+      - "${DATABASE_PORT:-27017}:27017"
     environment:
-      - POSTGRES_DB=educational_dashboard
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=password
+      - MONGO_INITDB_DATABASE=educational_dashboard
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
 ```
 
 #### Docker Compose por Ambiente
@@ -665,42 +755,41 @@ services:
 ##############################################
 ## Flujo de Trabajo del Stage 1
 
-### Orden de Implementación
-1. **Backend Base** (2-3 días)
-   - Configurar servidor FastAPI + Python
-   - Implementar autenticación JWT
-   - Crear dataset mock inicial
-   - Configurar tests básicos
+### Orden de Implementación con TDD
+1. **Backend Base** (3-4 días)
+   - Día 1: Escribir tests para servidor FastAPI y autenticación JWT
+   - Día 2: Implementar servidor y autenticación para pasar tests
+   - Día 3: Escribir tests para dataset mock
+   - Día 4: Implementar dataset mock y refactorizar
 
-2. **Backend OAuth** (2-3 días)
-   - Implementar flujo OAuth con Google
-   - Configurar manejo de tokens
-   - Crear endpoints OAuth
-   - Implementar tests OAuth
+2. **Backend OAuth** (3-4 días)
+   - Día 1: Escribir tests para flujo OAuth con Google
+   - Día 2: Implementar endpoints OAuth para pasar tests básicos
+   - Día 3: Escribir tests para manejo de tokens
+   - Día 4: Completar implementación OAuth y refactorizar
 
-3. **Frontend Base** (2-3 días)
-   - Configurar Next.js + TypeScript
-   - Implementar login y layout
-   - Integrar con backend auth
-   - Crear dashboard básico
+3. **Frontend Base** (3-4 días)
+   - Día 1: Escribir tests para componentes de login y layout
+   - Día 2: Implementar componentes para pasar tests
+   - Día 3: Escribir tests para integración con backend
+   - Día 4: Implementar integración y refactorizar
 
-4. **Frontend OAuth** (2-3 días)
-   - Implementar componentes OAuth
-   - Crear flujo de callback
-   - Manejar estados de autenticación
-   - Implementar persistencia de sesión
+4. **Frontend OAuth** (3-4 días)
+   - Día 1: Escribir tests para componentes OAuth
+   - Día 2: Implementar componentes OAuth para pasar tests
+   - Día 3: Escribir tests para flujo completo
+   - Día 4: Implementar flujo completo y refactorizar
 
-5. **Integración y Testing** (2-3 días)
-   - Conectar frontend con backend
-   - Tests end-to-end básicos
-   - Refinamiento de UX
-   - Documentación básica
+5. **Integración y Testing Final** (2-3 días)
+   - Día 1: Escribir tests end-to-end para flujos completos
+   - Día 2-3: Ajustar implementación para pasar tests E2E y documentar
 
 ### Criterios de Finalización
 - Todos los DoD completados
 - Tests pasando con cobertura ≥70%
 - Aplicación funcionando localmente
-- Commit con mensaje: `[feature/contracts] Stage 1 foundations and auth completed`
+- Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- Commit con mensaje: `[feature/contracts] Stage 1 foundations and auth completed with TDD`
 - Registro en `workspace/status.md`
 
 ##############################################
@@ -774,7 +863,7 @@ export BACKEND_PORT=8001
 #### Verificación de Conectividad
 ```bash
 # Verificar backend
-curl http://localhost:8000/api/v1/health/health
+curl http://localhost:8000/api/v1/health
 
 # Verificar frontend
 curl http://localhost:3000
@@ -788,7 +877,7 @@ curl http://localhost:3000
 3. **Responsive Design**: Asegurar funcionamiento en móviles desde el inicio
 4. **Seguridad Básica**: JWT, OAuth, validación de entrada, CORS apropiado
 5. **Logging**: Implementar logging estructurado para debugging
-6. **Error Handling**: Manejo consistente de errores en frontend y backend
+6. **Error Handling**: Manejo consistente de errores en frontend y backend con mensajes amigables, logging estructurado y protección de información sensible
 7. **Internacionalización**: Separar textos del código usando sistema i18n
 8. **Idioma Único**: Inglés como idioma base con estructura para expansión futura
 9. **Autenticación Dual**: Soportar tanto JWT como OAuth de manera coherente

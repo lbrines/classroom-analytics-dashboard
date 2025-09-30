@@ -25,12 +25,13 @@
 - Optimizar rendimiento de consultas de búsqueda
 
 ### Backend - Sistema de Notificaciones
-- Implementar sistema de notificaciones en tiempo real con FastAPI y WebSockets
-- Crear servicio de alertas inteligentes en Python
-- Integrar notificaciones Telegram (mock)
-- Desarrollar sistema de eventos y triggers
-- Implementar notificaciones por email (mock)
-- Crear sistema de preferencias de notificación
+- Implementar sistema de notificaciones en tiempo real con FastAPI y WebSockets seguros (wss://)
+- Crear servicio de alertas inteligentes en Python con manejo de errores tipado
+- Integrar notificaciones Telegram (mock) con reintentos y manejo de fallos
+- Desarrollar sistema de eventos y triggers con validación de datos
+- Implementar notificaciones por email (mock) con plantillas seguras
+- Crear sistema de preferencias de notificación con validación estricta
+- Implementar mecanismos de recuperación ante fallos de conexión
 
 ### Frontend - Visualización Avanzada
 - Implementar gráficos interactivos avanzados con React y Tailwind CSS
@@ -46,6 +47,19 @@
 - Desarrollar filtros dinámicos para búsqueda
 - Implementar vista detallada de estudiante
 - Crear experiencia de búsqueda contextual por rol
+
+##############################################
+## Metodología TDD
+
+Este proyecto sigue la metodología Test-Driven Development (TDD), que consiste en:
+
+1. **Escribir tests primero**: Crear tests que definan el comportamiento esperado antes de implementar el código.
+2. **Verificar que los tests fallen**: Ejecutar los tests para confirmar que fallan correctamente.
+3. **Implementar código mínimo**: Escribir el código necesario para que los tests pasen.
+4. **Verificar que los tests pasen**: Ejecutar los tests para confirmar su éxito.
+5. **Refactorizar**: Mejorar el código manteniendo los tests exitosos.
+
+Cada componente y funcionalidad debe seguir este ciclo de desarrollo.
 
 ##############################################
 ## Nuevos Componentes del Stage 3
@@ -377,36 +391,58 @@ POST /api/v1/reports/schedule                   # Programar reporte
 ```
 
 ##############################################
-## Testing del Stage 3
+## Testing del Stage 3 con TDD
+
+### Enfoque TDD para Backend
+1. **Tests Unitarios Iniciales**
+   - Escribir tests para cada servicio antes de su implementación
+   - Definir comportamientos esperados mediante assertions claras
+   - Crear mocks para dependencias externas
+
+2. **Tests de Integración Iniciales**
+   - Escribir tests para endpoints antes de implementarlos
+   - Definir contratos de API mediante tests
+   - Establecer casos de éxito y error esperados
 
 ### Backend Tests
-1. **Tests Unitarios**
-   - `insights.test.ts`: Métricas y analytics avanzados
-   - `search.test.ts`: Sistema de búsqueda
-   - `notifications.test.ts`: Sistema de notificaciones
-   - `websocket.test.ts`: Comunicación WebSocket
+1. **Tests Unitarios Iniciales**
+   - `insights.test.ts`: Tests para métricas y analytics avanzados antes de implementación
+   - `search.test.ts`: Tests para sistema de búsqueda antes de implementación
+   - `notifications.test.ts`: Tests para sistema de notificaciones antes de implementación
+   - `websocket.test.ts`: Tests para comunicación WebSocket antes de implementación
 
-2. **Tests de Integración**
-   - `insights.integration.test.ts`: Endpoints de insights
-   - `search.integration.test.ts`: Búsqueda y filtros
-   - `notifications.integration.test.ts`: Sistema completo de notificaciones
+2. **Tests de Integración Iniciales**
+   - `insights.integration.test.ts`: Tests para endpoints de insights antes de implementación
+   - `search.integration.test.ts`: Tests para búsqueda y filtros antes de implementación
+   - `notifications.integration.test.ts`: Tests para sistema completo de notificaciones antes de implementación
 
-3. **Tests de Performance**
-   - `search.performance.test.ts`: Rendimiento de búsquedas
-   - `websocket.performance.test.ts`: Rendimiento de WebSockets
-   - `cache.performance.test.ts`: Efectividad del caché avanzado
+3. **Tests de Performance Iniciales**
+   - `search.performance.test.ts`: Tests para rendimiento de búsquedas
+   - `websocket.performance.test.ts`: Tests para rendimiento de WebSockets
+   - `cache.performance.test.ts`: Tests para efectividad del caché avanzado
+
+### Enfoque TDD para Frontend
+1. **Tests de Componentes Iniciales**
+   - Escribir tests para cada componente UI antes de implementarlo
+   - Definir props, eventos y comportamiento esperado
+   - Crear mocks para servicios y contextos
+
+2. **Tests de Integración Iniciales**
+   - Escribir tests para flujos completos antes de implementarlos
+   - Definir comportamiento esperado para interacciones complejas
+   - Simular eventos y cambios de estado en flujos completos
 
 ### Frontend Tests
-1. **Tests de Componentes**
-   - `SearchBar.test.tsx`: Barra de búsqueda
-   - `NotificationCenter.test.tsx`: Centro de notificaciones
-   - `AdvancedCharts.test.tsx`: Gráficos avanzados
-   - `StudentDetail.test.tsx`: Vista detallada de estudiante
+1. **Tests de Componentes Iniciales**
+   - `SearchBar.test.tsx`: Tests para barra de búsqueda antes de implementación
+   - `NotificationCenter.test.tsx`: Tests para centro de notificaciones antes de implementación
+   - `AdvancedCharts.test.tsx`: Tests para gráficos avanzados antes de implementación
+   - `StudentDetail.test.tsx`: Tests para vista detallada de estudiante antes de implementación
 
-2. **Tests de Integración**
-   - `SearchFlow.test.tsx`: Flujo completo de búsqueda
-   - `NotificationFlow.test.tsx`: Flujo de notificaciones
-   - `DashboardInteraction.test.tsx`: Interacciones en dashboards
+2. **Tests de Integración Iniciales**
+   - `SearchFlow.test.tsx`: Tests para flujo completo de búsqueda antes de implementación
+   - `NotificationFlow.test.tsx`: Tests para flujo de notificaciones antes de implementación
+   - `DashboardInteraction.test.tsx`: Tests para interacciones en dashboards antes de implementación
 
 ##############################################
 ## Criterios de Aceptación (DoD) - Stage 3
@@ -439,6 +475,14 @@ POST /api/v1/reports/schedule                   # Programar reporte
 - [ ] Feedback visual para todas las acciones
 - [ ] Experiencia consistente en todos los roles
 
+### Criterios TDD
+- [ ] Tests unitarios escritos antes de la implementación de cada componente
+- [ ] Tests de integración escritos antes de conectar componentes
+- [ ] Tests de performance definidos antes de optimizaciones
+- [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- [ ] Documentación de decisiones de diseño basadas en tests
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥75%)
+
 ##############################################
 ## Configuración de Desarrollo
 
@@ -453,6 +497,25 @@ SEARCH_INDEX_UPDATE_INTERVAL=60
 NOTIFICATION_RETENTION_DAYS=30
 EMAIL_MOCK=true
 TELEGRAM_MOCK=true
+TEST_WATCH_MODE=true
+TEST_COVERAGE_THRESHOLD=75
+TDD_CYCLE_VALIDATION=true
+
+# OAuth y Seguridad
+OAUTH_PKCE_ENABLED=true
+OAUTH_STATE_SECRET=your-random-state-secret
+OAUTH_REFRESH_TOKEN_ROTATION_ENABLED=true
+OAUTH_REFRESH_TOKEN_EXPIRY_DAYS=30
+OAUTH_ACCESS_TOKEN_EXPIRY_MINUTES=15
+OAUTH_ENFORCE_HTTPS=true
+WEBSOCKET_SECURE=true
+
+# Error Handling
+ERROR_SANITIZE_SENSITIVE_DATA=true
+ERROR_FRIENDLY_MESSAGES=true
+ERROR_RETRY_ATTEMPTS=3
+ERROR_RETRY_BACKOFF_MS=1000
+ERROR_BOUNDARY_FALLBACK_UI=true
 ```
 
 ### Frontend (.env.local)
@@ -466,47 +529,57 @@ NEXT_PUBLIC_NOTIFICATION_POLL_INTERVAL=30000
 ##############################################
 ## Flujo de Trabajo del Stage 3
 
-### Orden de Implementación
-1. **Backend Insights Avanzados** (3-4 días)
-   - Expandir servicios de métricas
-   - Implementar análisis avanzados
-   - Optimizar caché y rendimiento
+### Orden de Implementación con TDD
+1. **Backend Insights Avanzados** (4-5 días)
+   - Día 1: Escribir tests para servicios de métricas avanzadas
+   - Día 2: Implementar servicios básicos para pasar tests
+   - Día 3: Escribir tests para análisis avanzados y caché
+   - Día 4: Implementar análisis y caché para pasar tests
+   - Día 5: Refactorizar y optimizar rendimiento
 
-2. **Backend Búsqueda** (2-3 días)
-   - Implementar sistema de búsqueda
-   - Crear índices y optimizaciones
-   - Desarrollar filtros avanzados
+2. **Backend Búsqueda** (3-4 días)
+   - Día 1: Escribir tests para sistema de búsqueda e índices
+   - Día 2: Implementar sistema básico para pasar tests
+   - Día 3: Escribir tests para filtros avanzados
+   - Día 4: Implementar filtros y optimizaciones para pasar tests
 
-3. **Backend Notificaciones** (3-4 días)
-   - Implementar WebSockets
-   - Crear sistema de notificaciones
-   - Desarrollar alertas inteligentes
+3. **Backend Notificaciones** (4-5 días)
+   - Día 1: Escribir tests para WebSockets y sistema de notificaciones
+   - Día 2: Implementar WebSockets básicos para pasar tests
+   - Día 3: Escribir tests para alertas inteligentes y canales
+   - Día 4: Implementar alertas y canales para pasar tests
+   - Día 5: Refactorizar y optimizar
 
-4. **Frontend Visualizaciones** (4-5 días)
-   - Expandir dashboards con gráficos avanzados
-   - Implementar drill-down y navegación
-   - Crear widgets personalizables
+4. **Frontend Visualizaciones** (5-6 días)
+   - Día 1: Escribir tests para componentes de gráficos avanzados
+   - Día 2: Implementar componentes básicos para pasar tests
+   - Día 3: Escribir tests para drill-down y navegación
+   - Día 4: Implementar drill-down para pasar tests
+   - Día 5-6: Escribir tests e implementar widgets personalizables
 
-5. **Frontend Búsqueda** (2-3 días)
-   - Implementar interfaz de búsqueda
-   - Crear vista detallada de estudiante
-   - Desarrollar filtros dinámicos
+5. **Frontend Búsqueda** (3-4 días)
+   - Día 1: Escribir tests para interfaz de búsqueda
+   - Día 2: Implementar interfaz para pasar tests
+   - Día 3: Escribir tests para vista detallada y filtros dinámicos
+   - Día 4: Implementar vista detallada y filtros para pasar tests
 
-6. **Frontend Notificaciones** (2-3 días)
-   - Implementar centro de notificaciones
-   - Crear alertas visuales
-   - Desarrollar preferencias de usuario
+6. **Frontend Notificaciones** (3-4 días)
+   - Día 1: Escribir tests para centro de notificaciones
+   - Día 2: Implementar centro de notificaciones para pasar tests
+   - Día 3: Escribir tests para alertas visuales y preferencias
+   - Día 4: Implementar alertas y preferencias para pasar tests
 
-7. **Integración y Testing** (3-4 días)
-   - Integrar todos los componentes
-   - Realizar tests end-to-end
-   - Optimizar rendimiento
+7. **Integración y Testing Final** (3-4 días)
+   - Día 1: Escribir tests end-to-end para flujos completos
+   - Día 2: Integrar componentes para pasar tests E2E
+   - Día 3-4: Optimizar rendimiento y refactorizar
 
 ### Criterios de Finalización
 - Todos los DoD completados
 - Tests pasando con cobertura ≥75%
 - Aplicación funcionando con todas las nuevas características
-- Commit con mensaje: `[feature/contracts] Stage 3 visualization and notifications completed`
+- Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- Commit con mensaje: `[feature/contracts] Stage 3 visualization and notifications completed with TDD`
 - Registro en `workspace/status.md`
 
 ##############################################
@@ -519,6 +592,9 @@ NEXT_PUBLIC_NOTIFICATION_POLL_INTERVAL=30000
 5. **Accessibility**: Gráficos accesibles con alt text y navegación por teclado
 6. **Export Ready**: Preparar exportación de datos y visualizaciones
 7. **Modular Design**: Componentes reutilizables y configurables
-8. **Error Boundaries**: Manejo robusto de errores en visualizaciones
+8. **Error Boundaries**: Manejo robusto de errores en visualizaciones con mensajes amigables y estrategias de recuperación
+9. **TDD Estricto**: Seguir el ciclo TDD para todas las funcionalidades
+10. **Tests como Documentación**: Usar tests para documentar comportamiento esperado
+11. **Refactorización Segura**: Refactorizar con confianza gracias a los tests
 
 Este stage transforma datos en insights accionables para todos los roles del sistema educativo, mejorando la experiencia con búsqueda avanzada y notificaciones en tiempo real.

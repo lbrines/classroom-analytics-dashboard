@@ -11,12 +11,14 @@
 ## Objetivos del Stage 4
 
 ### Backend - Integración Completa Google
-- Implementar sincronización bidireccional con Google Classroom usando Python
-- Desarrollar gestión completa de estudiantes y tareas con FastAPI
-- Crear sistema de sincronización automática y manual
-- Implementar manejo avanzado de permisos Google
-- Desarrollar sistema de backup y recuperación
-- Crear webhooks para eventos de Google Classroom
+- Implementar sincronización bidireccional con Google Classroom usando Python y HTTPS obligatorio
+- Desarrollar gestión completa de estudiantes y tareas con FastAPI y validación estricta
+- Crear sistema de sincronización automática y manual con manejo de errores robusto
+- Implementar manejo avanzado de permisos Google con principio de menor privilegio
+- Desarrollar sistema de backup y recuperación con verificación de integridad
+- Crear webhooks para eventos de Google Classroom con validación de firma
+- Implementar PKCE para todos los flujos OAuth 2.0
+- Configurar rotación automática de refresh tokens
 
 ### Frontend - Gestión Avanzada Google
 - Implementar interfaz completa de gestión Google Classroom con Next.js
@@ -49,6 +51,19 @@
 - Desarrollar monitoreo de performance en producción
 - Implementar rollback automático
 - Crear sistema de feature flags
+
+##############################################
+## Metodología TDD
+
+Este proyecto sigue la metodología Test-Driven Development (TDD), que consiste en:
+
+1. **Escribir tests primero**: Crear tests que definan el comportamiento esperado antes de implementar el código.
+2. **Verificar que los tests fallen**: Ejecutar los tests para confirmar que fallan correctamente.
+3. **Implementar código mínimo**: Escribir el código necesario para que los tests pasen.
+4. **Verificar que los tests pasen**: Ejecutar los tests para confirmar su éxito.
+5. **Refactorizar**: Mejorar el código manteniendo los tests exitosos.
+
+Cada componente y funcionalidad debe seguir este ciclo de desarrollo. En este Stage 4, el enfoque TDD es especialmente crítico para garantizar la robustez de la integración completa con Google y el alto nivel de calidad requerido.
 
 ##############################################
 ## Nuevos Componentes del Stage 4
@@ -442,89 +457,123 @@ GET /api/v1/monitoring/performance           # Métricas de performance
 ```
 
 ##############################################
-## Testing del Stage 4
+## Testing del Stage 4 con TDD
+
+### Enfoque TDD para Backend
+1. **Tests Unitarios Iniciales**
+   - Escribir tests para cada servicio antes de su implementación
+   - Definir comportamientos esperados mediante assertions claras
+   - Crear mocks para dependencias externas
+   - Enfoque especial en mocks para APIs de Google
+
+2. **Tests de Integración Iniciales**
+   - Escribir tests para flujos completos antes de implementarlos
+   - Definir contratos de API mediante tests
+   - Establecer casos de éxito y error esperados
+   - Simular respuestas de Google API
 
 ### Backend Tests
-1. **Tests Unitarios**
-   - `google_sync_service.test.py`: Sincronización bidireccional
-   - `conflict_resolution.test.py`: Resolución de conflictos
-   - `backup_service.test.py`: Backup y recuperación
-   - `webhooks.test.py`: Procesamiento de webhooks
+1. **Tests Unitarios Iniciales**
+   - `google_sync_service.test.py`: Tests para sincronización bidireccional antes de implementación
+   - `conflict_resolution.test.py`: Tests para resolución de conflictos antes de implementación
+   - `backup_service.test.py`: Tests para backup y recuperación antes de implementación
+   - `webhooks.test.py`: Tests para procesamiento de webhooks antes de implementación
 
-2. **Tests de Integración**
-   - `google_api.integration.test.py`: Integración con Google API
-   - `sync_flow.integration.test.py`: Flujo completo de sincronización
-   - `backup_restore.integration.test.py`: Backup y restauración
+2. **Tests de Integración Iniciales**
+   - `google_api.integration.test.py`: Tests para integración con Google API antes de implementación
+   - `sync_flow.integration.test.py`: Tests para flujo completo de sincronización antes de implementación
+   - `backup_restore.integration.test.py`: Tests para backup y restauración antes de implementación
 
-3. **Tests de Performance**
-   - `sync_performance.test.py`: Rendimiento de sincronización
-   - `api_load.test.py`: Tests de carga de API
-   - `database_performance.test.py`: Rendimiento de base de datos
+3. **Tests de Performance Iniciales**
+   - `sync_performance.test.py`: Tests para rendimiento de sincronización
+   - `api_load.test.py`: Tests para carga de API
+   - `database_performance.test.py`: Tests para rendimiento de base de datos
+
+### Enfoque TDD para Frontend
+1. **Tests de Componentes Iniciales**
+   - Escribir tests para cada componente UI antes de implementarlo
+   - Definir props, eventos y comportamiento esperado
+   - Crear mocks para servicios y contextos
+   - Enfoque en accesibilidad desde el diseño
+
+2. **Tests E2E Iniciales**
+   - Escribir tests E2E para flujos críticos antes de implementarlos
+   - Definir escenarios completos de usuario
+   - Establecer criterios de éxito medibles
 
 ### Frontend Tests
-1. **Tests E2E**
-   - `admin_google.spec.ts`: Panel de administración Google
-   - `sync_process.spec.ts`: Proceso de sincronización
-   - `conflict_resolution.spec.ts`: Resolución de conflictos
-   - `accessibility.spec.ts`: Navegación por teclado y screen reader
+1. **Tests E2E Iniciales**
+   - `admin_google.spec.ts`: Tests para panel de administración Google antes de implementación
+   - `sync_process.spec.ts`: Tests para proceso de sincronización antes de implementación
+   - `conflict_resolution.spec.ts`: Tests para resolución de conflictos antes de implementación
+   - `accessibility.spec.ts`: Tests para navegación por teclado y screen reader antes de implementación
 
-2. **Tests de Componentes**
-   - `SyncPanel.test.tsx`: Panel de sincronización
-   - `ConflictResolver.test.tsx`: Resolución de conflictos
-   - `AccessibilityComponents.test.tsx`: Componentes de accesibilidad
+2. **Tests de Componentes Iniciales**
+   - `SyncPanel.test.tsx`: Tests para panel de sincronización antes de implementación
+   - `ConflictResolver.test.tsx`: Tests para resolución de conflictos antes de implementación
+   - `AccessibilityComponents.test.tsx`: Tests para componentes de accesibilidad antes de implementación
 
-3. **Tests Visuales**
-   - `dashboard_snapshots.test.tsx`: Snapshots de dashboards
-   - `high_contrast.test.tsx`: Modo de alto contraste
-   - `responsive_design.test.tsx`: Diseño responsive
+3. **Tests Visuales Iniciales**
+   - `dashboard_snapshots.test.tsx`: Tests para snapshots de dashboards antes de implementación
+   - `high_contrast.test.tsx`: Tests para modo de alto contraste antes de implementación
+   - `responsive_design.test.tsx`: Tests para diseño responsive antes de implementación
 
 ### Accessibility Tests
-1. **Tests Automatizados**
-   - `keyboard_navigation.test.ts`: Navegación por teclado
-   - `screen_reader.test.ts`: Compatibilidad con lectores de pantalla
-   - `color_contrast.test.ts`: Contraste de color
-   - `aria_roles.test.ts`: Roles ARIA correctos
+1. **Tests Automatizados Iniciales**
+   - `keyboard_navigation.test.ts`: Tests para navegación por teclado antes de implementación
+   - `screen_reader.test.ts`: Tests para compatibilidad con lectores de pantalla antes de implementación
+   - `color_contrast.test.ts`: Tests para contraste de color antes de implementación
+   - `aria_roles.test.ts`: Tests para roles ARIA correctos antes de implementación
 
 2. **Tests Manuales**
-   - Verificación con NVDA y JAWS
-   - Navegación exclusiva por teclado
-   - Pruebas con usuarios con discapacidades
-   - Validación WCAG 2.2 AA
+   - Definir protocolos de verificación con NVDA y JAWS
+   - Establecer criterios para navegación exclusiva por teclado
+   - Diseñar pruebas con usuarios con discapacidades
+   - Crear checklist de validación WCAG 2.2 AA
 
 ##############################################
 ## Criterios de Aceptación (DoD) - Stage 4
 
 ### Google Classroom Completo
-- [ ] Sincronización bidireccional funcionando correctamente
-- [ ] Gestión completa de estudiantes implementada
-- [ ] Gestión completa de tareas implementada
-- [ ] Sistema de backup y recuperación funcionando
-- [ ] Webhooks configurados y procesando eventos
-- [ ] Resolución de conflictos implementada
+- [ ] Sincronización bidireccional funcionando correctamente (extiende la integración básica del Stage 2)
+- [ ] Gestión completa de estudiantes implementada (basado en la estructura de Stage 1 y 2)
+- [ ] Gestión completa de tareas implementada (complementa las métricas del Stage 2 y 3)
+- [ ] Sistema de backup y recuperación funcionando (asegura persistencia de datos de stages anteriores)
+- [ ] Webhooks configurados y procesando eventos (integra con notificaciones del Stage 3)
+- [ ] Resolución de conflictos implementada (mejora el modo dual del Stage 2)
 
 ### Testing Completo
-- [ ] Cobertura de tests ≥85% en módulos críticos
-- [ ] Cobertura global ≥70%
-- [ ] Tests E2E cubriendo flujos críticos
-- [ ] Tests de performance estableciendo líneas base
-- [ ] Tests de integración con Google API
-- [ ] Tests visuales y de regresión implementados
+- [ ] Cobertura de tests ≥85% en módulos críticos (mejora el 70% requerido en stages anteriores)
+- [ ] Cobertura global ≥70% (consolida tests de todos los stages previos)
+- [ ] Tests E2E cubriendo flujos críticos (complementa los tests unitarios del Stage 1)
+- [ ] Tests de performance estableciendo líneas base (verifica optimizaciones del Stage 3)
+- [ ] Tests de integración con Google API (valida la integración completa del Stage 2)
+- [ ] Tests visuales y de regresión implementados (asegura consistencia visual del Stage 3)
 
 ### Accesibilidad WCAG 2.2 AA
-- [ ] Navegación completa por teclado
-- [ ] Compatibilidad con screen readers
-- [ ] Contraste de color cumpliendo AA/AAA
-- [ ] ARIA implementado correctamente
-- [ ] Modo de alto contraste funcionando
-- [ ] Validación automática de accesibilidad pasando
+- [ ] Navegación completa por teclado (aplica a todas las interfaces de stages anteriores)
+- [ ] Compatibilidad con screen readers (mejora la experiencia de usuario del Stage 3)
+- [ ] Contraste de color cumpliendo AA/AAA (refina el diseño visual del Stage 1)
+- [ ] ARIA implementado correctamente (complementa los componentes del Stage 2 y 3)
+- [ ] Modo de alto contraste funcionando (extiende la visualización del Stage 3)
+- [ ] Validación automática de accesibilidad pasando (integra con CI/CD)
 
 ### CI/CD Pipeline
-- [ ] GitHub Actions configurado y funcionando
-- [ ] Quality gates implementados
-- [ ] Deployment automático configurado
-- [ ] Monitoreo post-despliegue implementado
-- [ ] Sistema de feature flags funcionando
-- [ ] Rollback automático configurado
+- [ ] GitHub Actions configurado y funcionando (automatiza los procesos de testing de todos los stages)
+- [ ] Quality gates implementados (garantiza los criterios de calidad de stages anteriores)
+- [ ] Deployment automático configurado (optimiza el proceso de despliegue del Stage 1)
+- [ ] Monitoreo post-despliegue implementado (supervisa el rendimiento de features del Stage 2 y 3)
+- [ ] Sistema de feature flags funcionando (permite control gradual de nuevas funcionalidades)
+- [ ] Rollback automático configurado (proporciona seguridad para todas las implementaciones)
+
+### Criterios TDD
+- [ ] Tests unitarios escritos antes de la implementación de cada componente
+- [ ] Tests de integración escritos antes de conectar componentes
+- [ ] Tests E2E escritos antes de implementar flujos completos
+- [ ] Tests de accesibilidad escritos antes de implementar componentes visuales
+- [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- [ ] Documentación de decisiones de diseño basadas en tests
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥85% en módulos críticos, ≥70% global)
 
 ##############################################
 ## Configuración de Desarrollo
@@ -541,6 +590,28 @@ SYNC_SCHEDULE="0 3 * * *"
 BACKUP_SCHEDULE="0 1 * * *"
 BACKUP_RETENTION_DAYS=30
 WEBHOOK_SECRET=your-webhook-secret
+TEST_WATCH_MODE=true
+TEST_COVERAGE_THRESHOLD_CRITICAL=85
+TEST_COVERAGE_THRESHOLD_GLOBAL=70
+TDD_CYCLE_VALIDATION=true
+
+# OAuth Security
+OAUTH_PKCE_ENABLED=true
+OAUTH_STATE_SECRET=your-random-state-secret
+OAUTH_REFRESH_TOKEN_ROTATION_ENABLED=true
+OAUTH_REFRESH_TOKEN_EXPIRY_DAYS=15
+OAUTH_ACCESS_TOKEN_EXPIRY_MINUTES=10
+OAUTH_ENFORCE_HTTPS=true
+OAUTH_TOKEN_BINDING=true
+
+# Error Handling
+ERROR_SANITIZE_SENSITIVE_DATA=true
+ERROR_FRIENDLY_MESSAGES=true
+ERROR_CATALOG_PATH=/app/config/error_messages.json
+ERROR_RETRY_ATTEMPTS=3
+ERROR_RETRY_BACKOFF_MS=1000
+ERROR_BOUNDARY_FALLBACK_UI=true
+ERROR_REPORTING_ENABLED=true
 ```
 
 ### Frontend (.env.local)
@@ -581,62 +652,73 @@ jobs:
 ```
 
 ##############################################
-## Flujo de Trabajo del Stage 4
+## Flujo de Trabajo del Stage 4 con TDD
 
-### Orden de Implementación
-1. **Backend Google Completo** (5-6 días)
-   - Implementar sincronización bidireccional
-   - Crear gestión avanzada de estudiantes y tareas
-   - Desarrollar sistema de backup
-   - Configurar webhooks
+### Orden de Implementación con TDD
+1. **Backend Google Completo** (7-8 días)
+   - Día 1-2: Escribir tests para sincronización bidireccional
+   - Día 3: Implementar sincronización para pasar tests
+   - Día 4: Escribir tests para gestión avanzada de estudiantes y tareas
+   - Día 5: Implementar gestión avanzada para pasar tests
+   - Día 6: Escribir tests para sistema de backup y webhooks
+   - Día 7-8: Implementar backup y webhooks para pasar tests y refactorizar
 
-2. **Frontend Google Avanzado** (4-5 días)
-   - Crear panel de administración
-   - Implementar herramientas de sincronización
-   - Desarrollar gestión de conflictos
-   - Crear herramientas de diagnóstico
+2. **Frontend Google Avanzado** (6-7 días)
+   - Día 1: Escribir tests para panel de administración
+   - Día 2: Implementar panel para pasar tests
+   - Día 3: Escribir tests para herramientas de sincronización
+   - Día 4: Implementar herramientas para pasar tests
+   - Día 5: Escribir tests para gestión de conflictos y diagnóstico
+   - Día 6-7: Implementar gestión de conflictos y diagnóstico para pasar tests
 
-3. **Testing Infrastructure** (3-4 días)
-   - Configurar Playwright para E2E
-   - Implementar tests de performance
-   - Crear tests visuales
-   - Desarrollar tests de integración
+3. **Testing Infrastructure** (4-5 días)
+   - Día 1: Configurar Playwright y definir escenarios E2E
+   - Día 2: Escribir tests E2E para flujos críticos
+   - Día 3: Escribir tests de performance y visuales
+   - Día 4-5: Implementar tests de integración y refinar tests existentes
 
-4. **Accesibilidad** (4-5 días)
-   - Implementar navegación por teclado
-   - Crear componentes accesibles
-   - Configurar ARIA y roles
-   - Desarrollar modo de alto contraste
+4. **Accesibilidad** (5-6 días)
+   - Día 1: Escribir tests para navegación por teclado
+   - Día 2: Implementar navegación por teclado para pasar tests
+   - Día 3: Escribir tests para componentes accesibles y ARIA
+   - Día 4: Implementar componentes accesibles para pasar tests
+   - Día 5-6: Escribir tests e implementar modo de alto contraste
 
-5. **CI/CD Pipeline** (3-4 días)
-   - Configurar GitHub Actions
-   - Implementar quality gates
-   - Crear scripts de deployment
-   - Configurar feature flags
+5. **CI/CD Pipeline** (4-5 días)
+   - Día 1: Escribir tests para quality gates
+   - Día 2: Configurar GitHub Actions con validación de tests
+   - Día 3: Escribir tests para deployment y rollback
+   - Día 4-5: Implementar scripts de deployment y feature flags
 
-6. **Integración y Testing Final** (3-4 días)
-   - Realizar tests E2E completos
-   - Validar accesibilidad
-   - Verificar pipeline CI/CD
-   - Realizar pruebas de carga
+6. **Integración y Testing Final** (4-5 días)
+   - Día 1: Ejecutar y refinar tests E2E completos
+   - Día 2: Validar accesibilidad con herramientas automatizadas
+   - Día 3: Verificar pipeline CI/CD con tests completos
+   - Día 4-5: Realizar pruebas de carga y optimizar puntos críticos
 
 ### Criterios de Finalización
 - Todos los DoD completados
 - Tests pasando con cobertura requerida
 - Aplicación accesible según WCAG 2.2 AA
 - CI/CD pipeline funcionando correctamente
-- Commit con mensaje: `[feature/contracts] Stage 4 integration and quality completed`
+- Historial de commits muestra ciclo TDD (tests → implementación → refactor)
+- Commit con mensaje: `[feature/contracts] Stage 4 integration and quality completed with TDD`
 - Registro en `workspace/status.md`
 
 ##############################################
 ## Notas de Implementación
 
-1. **Robustez Ante Fallos**: Implementar manejo avanzado de errores y recuperación
-2. **Optimización de API**: Minimizar llamadas a Google API y respetar límites de rate
-3. **Accesibilidad desde el Inicio**: Integrar accesibilidad en todos los componentes nuevos
-4. **Testing Automatizado**: Priorizar la automatización de tests críticos
-5. **Monitoreo Proactivo**: Implementar alertas para detectar problemas temprano
-6. **Documentación Completa**: Documentar todas las integraciones y procesos
-7. **Seguridad**: Asegurar manejo adecuado de tokens y permisos
+1. **Robustez Ante Fallos**: Implementar manejo avanzado de errores y recuperación con estrategias de fallback
+2. **Optimización de API**: Minimizar llamadas a Google API y respetar límites de rate con backoff exponencial
+3. **Accesibilidad desde el Inicio**: Integrar accesibilidad en todos los componentes nuevos con pruebas automatizadas
+4. **Testing Automatizado**: Priorizar la automatización de tests críticos con cobertura completa de casos de error
+5. **Monitoreo Proactivo**: Implementar alertas para detectar problemas temprano con dashboards de error
+6. **Documentación Completa**: Documentar todas las integraciones y procesos incluyendo estrategias de manejo de errores
+7. **Seguridad OAuth**: Implementar PKCE, rotación de tokens, validación de estado y limitación de permisos
+8. **Mensajes de Error**: Crear catálogo de mensajes de error amigables con recomendaciones de solución
+9. **Protección de Datos**: Sanitizar información sensible en logs y mensajes de error
+10. **TDD para Errores**: Escribir tests específicos para escenarios de error antes de implementar código
+11. **Error Boundaries**: Implementar componentes de recuperación para fallos en UI con experiencia degradada
+12. **Cobertura de Código**: Mantener alta cobertura de tests en módulos críticos
 
-Este stage completa la integración con Google Classroom y eleva la calidad del sistema con testing exhaustivo, accesibilidad y CI/CD robusto.
+Este stage completa la integración con Google Classroom y eleva la calidad del sistema con testing exhaustivo, accesibilidad y CI/CD robusto. La implementación de TDD garantiza un código más mantenible, mejor documentado y con menos errores, especialmente importante en esta fase final donde se integran todos los componentes del sistema.
