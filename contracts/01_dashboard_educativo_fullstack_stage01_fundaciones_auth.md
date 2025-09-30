@@ -357,7 +357,7 @@ GET /api/v1/user/profile
 ## Criterios de Aceptación (DoD) - Stage 1
 
 ### Backend
-- [ ] Servidor FastAPI funcionando en puerto 8000
+- [ ] Servidor FastAPI funcionando en puerto 30000
 - [ ] Health check respondiendo correctamente
 - [ ] Autenticación JWT implementada y funcionando
 - [ ] Autenticación OAuth con Google implementada
@@ -399,19 +399,19 @@ GET /api/v1/user/profile
 ### Backend (.env)
 ```env
 ENVIRONMENT=development
-PORT=8000
+PORT=30000
 JWT_SECRET=dev-secret-key-change-in-production
 JWT_EXPIRES_IN=24h
-CORS_ORIGIN=http://localhost:3000
+CORS_ORIGIN=http://localhost:35000
 LOG_LEVEL=debug
 GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:3000/oauth/callback
+GOOGLE_REDIRECT_URI=http://localhost:35000/oauth/callback
 ```
 
 ### Frontend (.env.local)
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_API_URL=http://localhost:30000/api/v1
 NEXT_PUBLIC_APP_NAME=Educational Dashboard
 NEXT_PUBLIC_VERSION=1.0.0
 NEXT_PUBLIC_DEFAULT_LOCALE=en
@@ -422,13 +422,13 @@ NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 ```bash
 # Backend
 cd backend
-python -m uvicorn app.main:app --reload  # Servidor en modo desarrollo
+python -m uvicorn app.main:app --reload --port 30000  # Servidor en modo desarrollo
 python -m pytest                        # Ejecutar tests
 python -m pytest --watch                # Tests en modo watch
 
 # Frontend
 cd frontend
-npm run dev          # Next.js en modo desarrollo
+npm run dev -- --port 35000  # Next.js en modo desarrollo
 npm run build        # Build de producción
 npm run test         # Ejecutar tests con Vitest
 
