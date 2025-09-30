@@ -9,7 +9,7 @@ router = APIRouter()
 start_time = time.time()
 
 
-@router.get("/health", response_model=dict)
+@router.get("/health")
 async def health_check():
     """Health check endpoint."""
     uptime = time.time() - start_time
@@ -22,4 +22,4 @@ async def health_check():
         "uptime": round(uptime, 2)
     }
     
-    return create_success_response(health_data)
+    return create_success_response(health_data).model_dump()

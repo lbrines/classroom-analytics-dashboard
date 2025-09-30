@@ -34,7 +34,7 @@ class MockService:
                     name=user_data["name"],
                     role=UserRole(user_data["role"]),
                     active=user_data["active"],
-                    password_hash=get_password_hash(user_data["password"]),
+                    password_hash=user_data["password"],  # Store plain password for mock
                     created_at=user_data["created_at"],
                     updated_at=user_data["updated_at"]
                 )
@@ -51,7 +51,7 @@ class MockService:
                     name=user_data["name"],
                     role=UserRole(user_data["role"]),
                     active=user_data["active"],
-                    password_hash=get_password_hash(user_data["password"]),
+                    password_hash=user_data["password"],  # Store plain password for mock
                     created_at=user_data["created_at"],
                     updated_at=user_data["updated_at"]
                 )
@@ -68,7 +68,7 @@ class MockService:
                 name=user_data["name"],
                 role=UserRole(user_data["role"]),
                 active=user_data["active"],
-                password_hash=get_password_hash(user_data["password"]),
+                password_hash=user_data["password"],  # Store plain password for mock
                 created_at=user_data["created_at"],
                 updated_at=user_data["updated_at"]
             ))

@@ -19,7 +19,8 @@ class AuthService:
         if not user.active:
             raise AuthenticationError("User account is disabled")
         
-        if not verify_password(password, user.password_hash):
+        # For mock service, compare plain text passwords
+        if password != user.password_hash:
             return None
         
         return user

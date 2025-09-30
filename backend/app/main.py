@@ -13,7 +13,8 @@ app = FastAPI(
     description="Backend API for Educational Dashboard - Stage 1",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
 
 # Add CORS middleware

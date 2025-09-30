@@ -99,9 +99,21 @@ class TestAuthIntegration:
     
     def test_logout(self):
         """Test logout endpoint."""
+        # First login to get a valid token
+        login_response = client.post(
+            "/api/v1/auth/login",
+            json={
+                "email": "admin@educational.dashboard",
+                "password": "admin123"
+            }
+        )
+        assert login_response.status_code == 200
+        token = login_response.json()["data"]["access_token"]
+        
+        # Now test logout with valid token
         response = client.post(
             "/api/v1/auth/logout",
-            json={"token": "some_token"}
+            json={"token": token}
         )
         assert response.status_code == 200
         data = response.json()
