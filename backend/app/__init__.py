@@ -1,0 +1,1 @@
+"""Educational Dashboard Backend Application."""

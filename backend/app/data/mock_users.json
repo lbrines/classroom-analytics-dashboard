@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "id": "admin-001",
+      "email": "admin@educational.dashboard",
+      "password": "admin123",
+      "role": "admin",
+      "name": "System Administrator",
+      "active": true
+    },
+    {
+      "id": "coord-001",
+      "email": "coordinator@educational.dashboard",
+      "password": "coord123",
+      "role": "coordinator",
+      "name": "Maria Gonzalez",
+      "active": true
+    },
+    {
+      "id": "teacher-001",
+      "email": "teacher1@educational.dashboard",
+      "password": "teacher123",
+      "role": "teacher",
+      "name": "Carlos Rodriguez",
+      "active": true
+    },
+    {
+      "id": "student-001",
+      "email": "student1@educational.dashboard",
+      "password": "student123",
+      "role": "student",
+      "name": "Ana Martinez",
+      "active": true
+    }
+  ]
+}
