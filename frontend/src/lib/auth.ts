@@ -11,7 +11,7 @@ export class AuthService {
     );
     
     // Store token
-    apiClient.setAuthToken(response.data.access_token);
+    apiClient.setAuthTokenPublic(response.data.access_token);
     
     return response.data;
   }
@@ -48,7 +48,7 @@ export class AuthService {
     );
     
     // Update token
-    apiClient.setAuthToken(response.data.access_token);
+    apiClient.setAuthTokenPublic(response.data.access_token);
     
     return response.data;
   }
@@ -65,7 +65,7 @@ export class AuthService {
   }
 
   setToken(token: string): void {
-    apiClient.setAuthToken(token);
+    apiClient.setAuthTokenPublic(token);
   }
 }
 

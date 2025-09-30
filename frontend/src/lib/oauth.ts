@@ -51,7 +51,7 @@ export class OAuthService {
     );
 
     // Store token
-    apiClient.setAuthToken(response.data.access_token);
+    apiClient.setAuthTokenPublic(response.data.access_token);
 
     // Clean up stored state
     if (typeof window !== 'undefined') {

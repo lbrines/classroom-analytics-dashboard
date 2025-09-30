@@ -42,7 +42,9 @@ class ApiClient {
         if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
           // Handle unauthorized access
           this.clearAuthToken();
-          window.location.href = '/login';
+          if (typeof window !== 'undefined') {
+            window.location.href = '/login';
+          }
         }
         return Promise.reject(this.handleError(error));
       }
@@ -100,7 +102,7 @@ class ApiClient {
     };
   }
 
-  public setAuthToken(token: string): void {
+  public setAuthTokenPublic(token: string): void {
     this.setAuthToken(token);
   }
 
