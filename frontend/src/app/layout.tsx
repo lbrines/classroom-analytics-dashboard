@@ -11,7 +11,11 @@ export const metadata: Metadata = {
   description: 'Educational Dashboard - Stage 1 Implementation',
   keywords: ['education', 'dashboard', 'learning', 'management'],
   authors: [{ name: 'Educational Dashboard Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -21,6 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className={inter.className}>
         <QueryProvider>
           <AuthProvider>

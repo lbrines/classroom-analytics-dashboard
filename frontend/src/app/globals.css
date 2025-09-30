@@ -64,15 +64,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary-100;
+  @apply bg-secondary/10;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-secondary-300 rounded-full;
+  @apply bg-secondary/30 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-secondary-400;
+  @apply bg-secondary/40;
 }
 
 /* Loading animations */
@@ -106,16 +106,16 @@
 
 /* Focus styles */
 .focus-visible:focus {
-  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  @apply outline-none ring-2 ring-primary ring-offset-2;
 }
 
 /* Form styles */
 .form-input {
-  @apply block w-full rounded-md border border-secondary-300 px-3 py-2 text-sm placeholder:text-secondary-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 disabled:cursor-not-allowed disabled:bg-secondary-50 disabled:text-secondary-500;
+  @apply block w-full rounded-md border border px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground;
 }
 
 .form-input.error {
-  @apply border-error-300 focus:border-error-500 focus:ring-error-500;
+  @apply border-destructive focus:border-destructive focus:ring-destructive;
 }
 
 /* Button styles */
@@ -124,23 +124,23 @@
 }
 
 .btn-primary {
-  @apply bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
 }
 
 .btn-secondary {
-  @apply bg-secondary-100 text-secondary-900 hover:bg-secondary-200 active:bg-secondary-300;
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
 }
 
 .btn-outline {
-  @apply border border-secondary-300 bg-transparent text-secondary-700 hover:bg-secondary-50 active:bg-secondary-100;
+  @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
 }
 
 .btn-ghost {
-  @apply text-secondary-700 hover:bg-secondary-100 active:bg-secondary-200;
+  @apply hover:bg-accent hover:text-accent-foreground;
 }
 
 .btn-danger {
-  @apply bg-error-600 text-white hover:bg-error-700 active:bg-error-800;
+  @apply bg-destructive text-destructive-foreground hover:bg-destructive/90;
 }
 
 .btn-sm {
