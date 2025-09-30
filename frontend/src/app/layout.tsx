@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   description: 'Educational Dashboard - Stage 1 Implementation',
   keywords: ['education', 'dashboard', 'learning', 'management'],
   authors: [{ name: 'Educational Dashboard Team' }],
+  // Disable browser autofill to prevent extension overlay errors
+  other: {
+    'x-autofill': 'off',
+  },
 };
 
 export const viewport = {
@@ -27,8 +31,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        {/* Prevent browser extension autofill overlays */}
+        <meta name="autocomplete" content="off" />
       </head>
-      <body className={inter.className}>
+      <body className={inter.className} data-autofill="off">
         <QueryProvider>
           <AuthProvider>
             {children}
