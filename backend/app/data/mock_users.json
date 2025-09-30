@@ -1,0 +1,77 @@
+{
+  "users": [
+    {
+      "id": "admin-001",
+      "email": "admin@educational.dashboard",
+      "password": "admin123",
+      "role": "administrator",
+      "name": "System Administrator",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    },
+    {
+      "id": "coord-001",
+      "email": "coordinator@educational.dashboard",
+      "password": "coord123",
+      "role": "coordinator",
+      "name": "Maria Gonzalez",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    },
+    {
+      "id": "teacher-001",
+      "email": "teacher1@educational.dashboard",
+      "password": "teacher123",
+      "role": "teacher",
+      "name": "Carlos Rodriguez",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    },
+    {
+      "id": "teacher-002",
+      "email": "teacher2@educational.dashboard",
+      "password": "teacher123",
+      "role": "teacher",
+      "name": "Ana Martinez",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    },
+    {
+      "id": "student-001",
+      "email": "student1@educational.dashboard",
+      "password": "student123",
+      "role": "student",
+      "name": "Luis Perez",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    },
+    {
+      "id": "student-002",
+      "email": "student2@educational.dashboard",
+      "password": "student123",
+      "role": "student",
+      "name": "Sofia Garcia",
+      "active": true,
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    }
+  ],
+  "oauth_tokens": [
+    {
+      "id": "oauth-001",
+      "user_id": "teacher-001",
+      "provider": "google",
+      "access_token": "ya29.mock-token-teacher",
+      "refresh_token": "1//mock-refresh-token-teacher",
+      "expires_at": "2025-10-30T14:30:00Z",
+      "scope": "https://www.googleapis.com/auth/classroom.courses.readonly",
+      "created_at": "2025-09-30T10:00:00Z",
+      "updated_at": "2025-09-30T10:00:00Z"
+    }
+  ]
+}
