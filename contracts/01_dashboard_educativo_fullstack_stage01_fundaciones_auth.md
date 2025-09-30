@@ -357,7 +357,7 @@ GET /api/v1/user/profile
 ## Criterios de Aceptación (DoD) - Stage 1
 
 ### Backend
-- [ ] Servidor FastAPI funcionando en puerto 30000
+- [ ] Servidor FastAPI funcionando en puerto 8000 (desarrollo)
 - [ ] Health check respondiendo correctamente
 - [ ] Autenticación JWT implementada y funcionando
 - [ ] Autenticación OAuth con Google implementada
@@ -367,11 +367,12 @@ GET /api/v1/user/profile
 - [ ] Tests unitarios ≥70% cobertura
 - [ ] Tests de integración para auth funcionando
 - [ ] Logging estructurado configurado
-- [ ] Variables de entorno configuradas
+- [ ] Variables de entorno configuradas por ambiente
 - [ ] Documentación Swagger/OpenAPI generada automáticamente
+- [ ] Scripts de gestión de puertos funcionando
 
 ### Frontend
-- [ ] Next.js 15 configurado y funcionando
+- [ ] Next.js 15 configurado y funcionando en puerto 3000 (desarrollo)
 - [ ] Página de login responsiva y funcional
 - [ ] Flujo OAuth con Google implementado
 - [ ] Dashboard básico accesible post-login
@@ -384,56 +385,245 @@ GET /api/v1/user/profile
 - [ ] Manejo de estados de carga y error con React Query
 - [ ] Tests de componentes básicos funcionando con Vitest y RTL
 - [ ] TypeScript sin errores
+- [ ] Variables de entorno configuradas por ambiente
 
 ### Integración
 - [ ] Frontend y backend comunicándose correctamente
-- [ ] CORS configurado apropiadamente
+- [ ] CORS configurado apropiadamente para cada ambiente
 - [ ] Tokens JWT funcionando end-to-end
 - [ ] Flujo OAuth completo funcionando
 - [ ] Manejo de errores consistente
 - [ ] Sesiones persistiendo correctamente
+- [ ] Scripts de verificación de puertos funcionando
+- [ ] Configuración de Docker Compose operativa
 
 ##############################################
 ## Configuración de Desarrollo
 
-### Backend (.env)
+### Gestión de Puertos y Recursos
+
+#### Asignación de Puertos por Ambiente
+| Servicio | Desarrollo | Staging | Producción | Descripción |
+|----------|------------|---------|------------|-------------|
+| Frontend | 3000 | 3001 | 80/443 | Next.js Development |
+| Backend | 8000 | 8001 | 443 | FastAPI Development |
+| Database | 5432 | 5433 | 5432 | PostgreSQL |
+| Redis | 6379 | 6380 | 6379 | Cache (Opcional) |
+
+#### Variables de Entorno por Ambiente
+
+**Desarrollo (.env.development)**
 ```env
+# Ambiente
 ENVIRONMENT=development
-PORT=30000
+
+# Puertos
+FRONTEND_PORT=3000
+BACKEND_PORT=8000
+DATABASE_PORT=5432
+
+# Backend
+PORT=8000
 JWT_SECRET=dev-secret-key-change-in-production
 JWT_EXPIRES_IN=24h
-CORS_ORIGIN=http://localhost:35000
+CORS_ORIGIN=http://localhost:3000
 LOG_LEVEL=debug
+
+# OAuth
 GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:35000/oauth/callback
+GOOGLE_REDIRECT_URI=http://localhost:3000/oauth/callback
 ```
 
-### Frontend (.env.local)
+**Staging (.env.staging)**
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:30000/api/v1
+# Ambiente
+ENVIRONMENT=staging
+
+# Puertos
+FRONTEND_PORT=3001
+BACKEND_PORT=8001
+DATABASE_PORT=5433
+
+# Backend
+PORT=8001
+JWT_SECRET=staging-secret-key
+JWT_EXPIRES_IN=12h
+CORS_ORIGIN=http://localhost:3001
+LOG_LEVEL=info
+
+# OAuth
+GOOGLE_CLIENT_ID=your-staging-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-staging-google-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:3001/oauth/callback
+```
+
+**Producción (.env.production)**
+```env
+# Ambiente
+ENVIRONMENT=production
+
+# Puertos
+FRONTEND_PORT=80
+BACKEND_PORT=443
+DATABASE_PORT=5432
+
+# Backend
+PORT=443
+JWT_SECRET=production-secret-key-change-this
+JWT_EXPIRES_IN=1h
+CORS_ORIGIN=https://your-domain.com
+LOG_LEVEL=warning
+
+# OAuth
+GOOGLE_CLIENT_ID=your-production-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-production-google-client-secret
+GOOGLE_REDIRECT_URI=https://your-domain.com/oauth/callback
+```
+
+#### Frontend (.env.local)
+```env
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 NEXT_PUBLIC_APP_NAME=Educational Dashboard
 NEXT_PUBLIC_VERSION=1.0.0
 NEXT_PUBLIC_DEFAULT_LOCALE=en
+
+# OAuth
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
 ```
 
-### Comandos de Desarrollo
+### Scripts de Gestión de Puertos
+
+#### Verificación de Puertos (scripts/check-ports.sh)
 ```bash
-# Backend
+#!/bin/bash
+# Verificar disponibilidad de puertos
+
+check_port() {
+    local port=$1
+    local service=$2
+    if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+        echo "❌ Puerto $port ($service) está en uso"
+        return 1
+    else
+        echo "✅ Puerto $port ($service) está disponible"
+        return 0
+    fi
+}
+
+echo "🔍 Verificando puertos del Dashboard Educativo..."
+check_port 3000 "Frontend"
+check_port 8000 "Backend"
+check_port 5432 "Database"
+check_port 6379 "Redis (Opcional)"
+
+echo "✅ Verificación completada"
+```
+
+#### Inicio Automático (scripts/dev.sh)
+```bash
+#!/bin/bash
+# Inicio automático con detección de puertos
+
+source .env.development 2>/dev/null || {
+    echo "⚠️  Archivo .env.development no encontrado, usando valores por defecto"
+    FRONTEND_PORT=3000
+    BACKEND_PORT=8000
+}
+
+echo "🚀 Iniciando Dashboard Educativo..."
+echo "Frontend: http://localhost:$FRONTEND_PORT"
+echo "Backend: http://localhost:$BACKEND_PORT"
+
+# Verificar puertos
+./scripts/check-ports.sh
+
+# Iniciar servicios
+cd frontend && npm run dev -- --port $FRONTEND_PORT &
+cd backend && python -m uvicorn app.main:app --reload --port $BACKEND_PORT &
+
+echo "✅ Servicios iniciados"
+```
+
+#### Monitoreo de Puertos (scripts/monitor-ports.sh)
+```bash
+#!/bin/bash
+# Monitoreo continuo de puertos
+
+while true; do
+    echo "=== Estado de Puertos $(date) ==="
+    
+    for port in 3000 8000 5432; do
+        if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+            echo "✅ Puerto $port: ACTIVO"
+        else
+            echo "❌ Puerto $port: INACTIVO"
+        fi
+    done
+    
+    echo "================================"
+    sleep 30
+done
+```
+
+### Comandos de Desarrollo
+
+#### Comandos Básicos
+```bash
+# Verificar puertos disponibles
+./scripts/check-ports.sh
+
+# Iniciar con detección automática
+./scripts/dev.sh
+
+# Monitoreo continuo
+./scripts/monitor-ports.sh
+
+# Backend manual
 cd backend
-python -m uvicorn app.main:app --reload --port 30000  # Servidor en modo desarrollo
+python -m uvicorn app.main:app --reload --port 8000
 python -m pytest                        # Ejecutar tests
 python -m pytest --watch                # Tests en modo watch
 
-# Frontend
+# Frontend manual
 cd frontend
-npm run dev -- --port 35000  # Next.js en modo desarrollo
+npm run dev -- --port 3000  # Next.js en modo desarrollo
 npm run build        # Build de producción
 npm run test         # Ejecutar tests con Vitest
+```
 
-# Ambos (desde raíz)
-./scripts/dev-all.sh  # Ambos servidores simultáneamente
+#### Docker Compose (docker-compose.yml)
+```yaml
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:${BACKEND_PORT:-8000}/api/v1
+    depends_on:
+      - backend
+  
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - PORT=8000
+      - CORS_ORIGIN=http://localhost:${FRONTEND_PORT:-3000}
+    depends_on:
+      - database
+  
+  database:
+    image: postgres:15
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_DB=educational_dashboard
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
 ```
 
 ##############################################
@@ -478,6 +668,86 @@ npm run test         # Ejecutar tests con Vitest
 - Registro en `workspace/status.md`
 
 ##############################################
+## Mejores Prácticas de Gestión de Puertos
+
+### Principios de Asignación de Puertos
+
+#### 1. **Puertos Estándar por Servicio**
+- **Frontend**: 3000, 3001, 3002... (rango 3000-3099)
+- **Backend**: 8000, 8001, 8002... (rango 8000-8099)
+- **Database**: 5432, 5433, 5434... (rango 5432-5439)
+- **Cache**: 6379, 6380, 6381... (rango 6379-6389)
+
+#### 2. **Configuración por Ambiente**
+```bash
+# Desarrollo: Puertos estándar
+FRONTEND_PORT=3000
+BACKEND_PORT=8000
+
+# Staging: Puertos +1
+FRONTEND_PORT=3001
+BACKEND_PORT=8001
+
+# Producción: Puertos estándar web
+FRONTEND_PORT=80/443
+BACKEND_PORT=443
+```
+
+#### 3. **Verificación Automática**
+- Scripts que verifican disponibilidad antes del inicio
+- Detección automática de conflictos
+- Sugerencias de puertos alternativos
+- Monitoreo continuo del estado
+
+#### 4. **Documentación Centralizada**
+- Registro de todos los puertos asignados
+- Documentación de cambios y migraciones
+- Guías de troubleshooting
+- Comandos de verificación
+
+### Beneficios de esta Implementación
+
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Consistencia** | Mismos puertos en todo el equipo |
+| **Flexibilidad** | Fácil cambio entre entornos |
+| **Detección Temprana** | Conflictos identificados antes del desarrollo |
+| **Escalabilidad** | Fácil agregar nuevos servicios |
+| **Mantenibilidad** | Configuración centralizada y documentada |
+
+### Troubleshooting Común
+
+#### Puerto en Uso
+```bash
+# Identificar proceso usando puerto
+lsof -i :8000
+
+# Terminar proceso
+kill -9 <PID>
+
+# Verificar disponibilidad
+./scripts/check-ports.sh
+```
+
+#### Cambio de Puerto
+```bash
+# Actualizar variables de entorno
+export BACKEND_PORT=8001
+
+# Reiniciar servicios
+./scripts/dev.sh
+```
+
+#### Verificación de Conectividad
+```bash
+# Verificar backend
+curl http://localhost:8000/api/v1/health/health
+
+# Verificar frontend
+curl http://localhost:3000
+```
+
+##############################################
 ## Notas de Implementación
 
 1. **Prioridad en Simplicidad**: Mantener el código simple y bien estructurado
@@ -489,5 +759,6 @@ npm run test         # Ejecutar tests con Vitest
 7. **Internacionalización**: Separar textos del código usando sistema i18n
 8. **Idioma Único**: Inglés como idioma base con estructura para expansión futura
 9. **Autenticación Dual**: Soportar tanto JWT como OAuth de manera coherente
+10. **Gestión de Puertos**: Implementar mejores prácticas de asignación y verificación
 
-Este stage establece las fundaciones sólidas y el sistema de autenticación completo para el resto del proyecto.
+Este stage establece las fundaciones sólidas, el sistema de autenticación completo y las mejores prácticas de gestión de recursos para el resto del proyecto.
