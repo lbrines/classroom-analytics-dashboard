@@ -26,7 +26,7 @@ export function DashboardHeader() {
                 {t('auth.title')}
               </h1>
             </div>
-            <nav className="ml-10 flex space-x-8">
+            <nav className="ml-10 flex space-x-6">
               <a
                 href="/dashboard"
                 className="text-secondary-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -34,22 +34,22 @@ export function DashboardHeader() {
                 {t('navigation.dashboard')}
               </a>
               <a
-                href="/students"
+                href="/search"
                 className="text-secondary-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
-                {t('navigation.students')}
+                Students
               </a>
               <a
                 href="/courses"
                 className="text-secondary-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
-                {t('navigation.courses')}
+                Courses
               </a>
               <a
                 href="/reports"
                 className="text-secondary-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               >
-                {t('navigation.reports')}
+                Reports
               </a>
             </nav>
           </div>

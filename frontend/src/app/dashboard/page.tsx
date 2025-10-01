@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { StatsCard } from '@/components/dashboard/StatsCard';
@@ -9,6 +11,15 @@ import { useTranslation } from '@/hooks/useTranslation';
 export default function DashboardPage() {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const router = useRouter();
+
+  // Auto-redirect to role-specific dashboard
+  useEffect(() => {
+    if (user?.role) {
+      const roleRoute = user.role === 'administrator' ? 'admin' : user.role;
+      router.push(`/dashboard/${roleRoute}`);
+    }
+  }, [user, router]);
 
   return (
     <AuthGuard>
