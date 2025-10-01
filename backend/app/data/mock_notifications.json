@@ -1,0 +1,92 @@
+{
+  "notifications": [
+    {
+      "id": "notif-001",
+      "user_id": "teacher-001",
+      "type": "alert",
+      "priority": "high",
+      "title": "Student at Risk",
+      "message": "Ana Martinez has missed 2 consecutive assignments in eCommerce course",
+      "data": {
+        "student_id": "student-001",
+        "course_id": "course-001",
+        "assignments_missed": 2
+      },
+      "read": false,
+      "created_at": "2025-09-30T14:30:00Z",
+      "expires_at": "2025-10-07T14:30:00Z",
+      "actions": [
+        {
+          "label": "View Student",
+          "url": "/search/student-001"
+        },
+        {
+          "label": "Send Message",
+          "action": "sendMessage"
+        }
+      ]
+    },
+    {
+      "id": "notif-002",
+      "user_id": "teacher-001",
+      "type": "info",
+      "priority": "medium",
+      "title": "Assignment Due Soon",
+      "message": "Module 3 Project deadline is in 2 days",
+      "data": {
+        "assignment_id": "assign-015",
+        "course_id": "course-001",
+        "due_date": "2025-10-02T23:59:00Z"
+      },
+      "read": false,
+      "created_at": "2025-09-30T10:00:00Z",
+      "expires_at": "2025-10-02T23:59:00Z",
+      "actions": []
+    },
+    {
+      "id": "notif-003",
+      "user_id": "student-001",
+      "type": "warning",
+      "priority": "medium",
+      "title": "Pending Assignment",
+      "message": "You have 1 assignment due tomorrow in Web Development course",
+      "data": {
+        "assignment_id": "assign-022",
+        "course_id": "course-002",
+        "due_date": "2025-10-01T23:59:00Z"
+      },
+      "read": false,
+      "created_at": "2025-09-30T09:00:00Z",
+      "expires_at": "2025-10-01T23:59:00Z",
+      "actions": [
+        {
+          "label": "View Assignment",
+          "url": "/courses/course-002/assignments/assign-022"
+        }
+      ]
+    }
+  ],
+  "preferences": [
+    {
+      "user_id": "teacher-001",
+      "channels": {
+        "in_app": true,
+        "email": true,
+        "telegram": false
+      },
+      "types": {
+        "assignment": true,
+        "student_risk": true,
+        "announcement": true,
+        "grade": false
+      },
+      "quiet_hours_enabled": true,
+      "quiet_hours_start": "22:00",
+      "quiet_hours_end": "08:00",
+      "digest_enabled": true,
+      "digest_frequency": "daily",
+      "digest_time": "18:00"
+    }
+  ]
+}
+
