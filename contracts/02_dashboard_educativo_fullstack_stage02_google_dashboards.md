@@ -30,6 +30,8 @@
 - Crear interfaz para gestión de conexión Google
 - Mostrar información de cuenta Google conectada
 - Implementar lista de cursos de Google Classroom
+- Configurar health checks para conexión Google
+- Implementar auto-cleanup de sesiones Google
 
 ### Frontend - Dashboards Básicos
 - Implementar dashboards básicos por rol (admin, coordinador, docente, estudiante)
@@ -151,6 +153,8 @@ frontend/src/
    - Listado de estudiantes por curso
    - Métricas básicas por curso
    - Sincronización bajo demanda
+   - Health checks para integridad de datos
+   - Auto-cleanup de datos corruptos
 
 3. **Métricas Básicas**
    - Cálculo de KPIs educativos esenciales
@@ -359,6 +363,9 @@ GET /api/v1/dashboard/student                 # Dashboard estudiante
 - [ ] Rate limiting configurado
 - [ ] Manejo de errores de API implementado con sanitización y categorización
 - [ ] Tests de integración con Google pasando
+- [ ] Health checks para conexión Google implementados
+- [ ] Auto-cleanup de sesiones Google funcionando
+- [ ] Recuperación rápida ante fallos de API
 
 ### Backend Métricas
 - [ ] Servicio de métricas calculando KPIs correctamente
@@ -373,6 +380,9 @@ GET /api/v1/dashboard/student                 # Dashboard estudiante
 - [ ] Lista de cursos de Google mostrándose correctamente
 - [ ] Navegación entre cursos funcionando
 - [ ] Manejo de errores de conexión implementado con mensajes amigables y reintentos
+- [ ] Health checks visuales para estado de conexión Google
+- [ ] Auto-cleanup de datos corruptos en interfaz
+- [ ] Recuperación rápida ante fallos de conexión
 
 ### Frontend Dashboards
 - [ ] Dashboard admin con métricas globales
@@ -387,9 +397,12 @@ GET /api/v1/dashboard/student                 # Dashboard estudiante
 ### Criterios TDD
 - [ ] Tests unitarios escritos antes de la implementación de cada componente
 - [ ] Tests de integración escritos antes de conectar componentes
+- [ ] Tests de infraestructura implementados
 - [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
 - [ ] Documentación de decisiones de diseño basadas en tests
-- [ ] Cobertura de tests cumple con el mínimo requerido (≥70%)
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥75%)
+- [ ] Tests de health checks implementados
+- [ ] Tests de auto-cleanup implementados
 
 ##############################################
 ## Configuración de Desarrollo
@@ -484,5 +497,8 @@ NEXT_PUBLIC_DEFAULT_MODE=MOCK
 7. **Testing Completo**: Cubrir tanto modo Google como modo Mock en tests
 8. **Enfoque TDD**: Seguir estrictamente el ciclo de desarrollo TDD para todos los componentes
 9. **Documentación de Tests**: Documentar las decisiones de diseño basadas en los tests
+10. **Health Checks**: Verificación continua de salud de conexiones Google
+11. **Auto-cleanup**: Limpieza automática de sesiones y datos corruptos
+12. **Recuperación Rápida**: Procedimientos para resolver fallos de API en <30 minutos
 
 Este stage establece la conexión con Google Classroom y los dashboards básicos por rol, sentando las bases para visualizaciones más avanzadas en etapas posteriores.

@@ -19,6 +19,8 @@
 - Crear webhooks para eventos de Google Classroom con validación de firma
 - Implementar PKCE para todos los flujos OAuth 2.0
 - Configurar rotación automática de refresh tokens
+- Configurar health checks completos para integración Google
+- Implementar auto-cleanup de sincronizaciones fallidas y datos corruptos
 
 ### Frontend - Gestión Avanzada Google
 - Implementar interfaz completa de gestión Google Classroom con Next.js
@@ -27,14 +29,18 @@
 - Implementar importación/exportación masiva
 - Crear panel de administración Google con Tailwind CSS
 - Desarrollar herramientas de diagnóstico y troubleshooting
+- Configurar health checks para herramientas de administración Google
+- Implementar auto-cleanup de conflictos de datos y sesiones expiradas
 
 ### Testing Completo
-- Alcanzar cobertura ≥85% en módulos críticos, ≥70% global
+- Alcanzar cobertura ≥90% en módulos críticos, ≥80% global
 - Implementar testing E2E completo con Playwright
 - Crear suite de tests de performance y carga
 - Desarrollar tests de accesibilidad automatizados
 - Implementar testing de integración con Google API en Python
 - Crear tests de regresión visual con Vitest y RTL
+- Implementar tests de health checks y auto-cleanup
+- Desarrollar tests de recuperación ante fallos
 
 ### Accesibilidad WCAG 2.2 AA
 - Implementar navegación por teclado completa
@@ -541,14 +547,19 @@ GET /api/v1/monitoring/performance           # Métricas de performance
 - [ ] Sistema de backup y recuperación funcionando (asegura persistencia de datos de stages anteriores)
 - [ ] Webhooks configurados y procesando eventos (integra con notificaciones del Stage 3)
 - [ ] Resolución de conflictos implementada (mejora el modo dual del Stage 2)
+- [ ] Health checks completos para integración Google implementados
+- [ ] Auto-cleanup de sincronizaciones fallidas funcionando
+- [ ] Recuperación rápida ante fallos de integración Google
 
 ### Testing Completo
-- [ ] Cobertura de tests ≥85% en módulos críticos (mejora el 70% requerido en stages anteriores)
-- [ ] Cobertura global ≥70% (consolida tests de todos los stages previos)
+- [ ] Cobertura de tests ≥90% en módulos críticos (mejora el 70% requerido en stages anteriores)
+- [ ] Cobertura global ≥80% (consolida tests de todos los stages previos)
 - [ ] Tests E2E cubriendo flujos críticos (complementa los tests unitarios del Stage 1)
 - [ ] Tests de performance estableciendo líneas base (verifica optimizaciones del Stage 3)
 - [ ] Tests de integración con Google API (valida la integración completa del Stage 2)
 - [ ] Tests visuales y de regresión implementados (asegura consistencia visual del Stage 3)
+- [ ] Tests de health checks y auto-cleanup implementados
+- [ ] Tests de recuperación ante fallos implementados
 
 ### Accesibilidad WCAG 2.2 AA
 - [ ] Navegación completa por teclado (aplica a todas las interfaces de stages anteriores)
@@ -571,9 +582,10 @@ GET /api/v1/monitoring/performance           # Métricas de performance
 - [ ] Tests de integración escritos antes de conectar componentes
 - [ ] Tests E2E escritos antes de implementar flujos completos
 - [ ] Tests de accesibilidad escritos antes de implementar componentes visuales
+- [ ] Tests de infraestructura escritos antes de implementar health checks y auto-cleanup
 - [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
 - [ ] Documentación de decisiones de diseño basadas en tests
-- [ ] Cobertura de tests cumple con el mínimo requerido (≥85% en módulos críticos, ≥70% global)
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥90% en módulos críticos, ≥80% global)
 
 ##############################################
 ## Configuración de Desarrollo
@@ -591,8 +603,8 @@ BACKUP_SCHEDULE="0 1 * * *"
 BACKUP_RETENTION_DAYS=30
 WEBHOOK_SECRET=your-webhook-secret
 TEST_WATCH_MODE=true
-TEST_COVERAGE_THRESHOLD_CRITICAL=85
-TEST_COVERAGE_THRESHOLD_GLOBAL=70
+TEST_COVERAGE_THRESHOLD_CRITICAL=90
+TEST_COVERAGE_THRESHOLD_GLOBAL=80
 TDD_CYCLE_VALIDATION=true
 
 # OAuth Security
@@ -720,5 +732,8 @@ jobs:
 10. **TDD para Errores**: Escribir tests específicos para escenarios de error antes de implementar código
 11. **Error Boundaries**: Implementar componentes de recuperación para fallos en UI con experiencia degradada
 12. **Cobertura de Código**: Mantener alta cobertura de tests en módulos críticos
+13. **Health Checks**: Verificación continua de salud de integración Google y servicios
+14. **Auto-cleanup**: Limpieza automática de sincronizaciones fallidas y datos corruptos
+15. **Recuperación Rápida**: Procedimientos para resolver fallos de integración en <30 minutos
 
 Este stage completa la integración con Google Classroom y eleva la calidad del sistema con testing exhaustivo, accesibilidad y CI/CD robusto. La implementación de TDD garantiza un código más mantenible, mejor documentado y con menos errores, especialmente importante en esta fase final donde se integran todos los componentes del sistema.

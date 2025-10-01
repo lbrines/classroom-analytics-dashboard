@@ -32,6 +32,8 @@
 - Implementar notificaciones por email (mock) con plantillas seguras
 - Crear sistema de preferencias de notificación con validación estricta
 - Implementar mecanismos de recuperación ante fallos de conexión
+- Configurar health checks para WebSockets y servicios de notificación
+- Implementar auto-cleanup de notificaciones expiradas y conexiones huérfanas
 
 ### Frontend - Visualización Avanzada
 - Implementar gráficos interactivos avanzados con React y Tailwind CSS
@@ -40,6 +42,8 @@
 - Implementar drill-down y navegación contextual
 - Crear dashboards avanzados por rol
 - Desarrollar sistema de alertas visuales
+- Configurar health checks para componentes de visualización
+- Implementar auto-cleanup de widgets corruptos y datos obsoletos
 
 ### Frontend - Búsqueda de Estudiantes
 - Implementar interfaz de búsqueda avanzada
@@ -454,8 +458,11 @@ POST /api/v1/reports/schedule                   # Programar reporte
 - [ ] WebSockets configurados y funcionando
 - [ ] Caché avanzado optimizando consultas
 - [ ] Endpoints respondiendo correctamente
-- [ ] Tests con cobertura ≥75%
+- [ ] Tests con cobertura ≥80%
 - [ ] Performance optimizada para grandes volúmenes de datos
+- [ ] Health checks para WebSockets y servicios de notificación implementados
+- [ ] Auto-cleanup de notificaciones expiradas funcionando
+- [ ] Recuperación rápida ante fallos de WebSockets
 
 ### Frontend Avanzado
 - [ ] Visualizaciones interactivas avanzadas implementadas
@@ -466,6 +473,9 @@ POST /api/v1/reports/schedule                   # Programar reporte
 - [ ] Widgets personalizables funcionando
 - [ ] Drill-down y navegación contextual
 - [ ] Responsive design en todas las nuevas funcionalidades
+- [ ] Health checks para componentes de visualización implementados
+- [ ] Auto-cleanup de widgets corruptos funcionando
+- [ ] Recuperación rápida ante fallos de visualización
 
 ### Experiencia de Usuario
 - [ ] Notificaciones entregadas en tiempo real
@@ -479,9 +489,12 @@ POST /api/v1/reports/schedule                   # Programar reporte
 - [ ] Tests unitarios escritos antes de la implementación de cada componente
 - [ ] Tests de integración escritos antes de conectar componentes
 - [ ] Tests de performance definidos antes de optimizaciones
+- [ ] Tests de infraestructura implementados
 - [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
 - [ ] Documentación de decisiones de diseño basadas en tests
-- [ ] Cobertura de tests cumple con el mínimo requerido (≥75%)
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥80%)
+- [ ] Tests de health checks implementados
+- [ ] Tests de auto-cleanup implementados
 
 ##############################################
 ## Configuración de Desarrollo
@@ -596,5 +609,8 @@ NEXT_PUBLIC_NOTIFICATION_POLL_INTERVAL=30000
 9. **TDD Estricto**: Seguir el ciclo TDD para todas las funcionalidades
 10. **Tests como Documentación**: Usar tests para documentar comportamiento esperado
 11. **Refactorización Segura**: Refactorizar con confianza gracias a los tests
+12. **Health Checks**: Verificación continua de salud de WebSockets y servicios
+13. **Auto-cleanup**: Limpieza automática de notificaciones y widgets corruptos
+14. **Recuperación Rápida**: Procedimientos para resolver fallos en <30 minutos
 
 Este stage transforma datos en insights accionables para todos los roles del sistema educativo, mejorando la experiencia con búsqueda avanzada y notificaciones en tiempo real.

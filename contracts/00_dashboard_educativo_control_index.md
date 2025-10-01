@@ -42,10 +42,11 @@
 
 ### Stack Tecnológico
 - **Backend**: Python + FastAPI + MongoDB
-- **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
+- **Frontend**: Next.js 13.5.6 (LTS) + TypeScript + Tailwind CSS
 - **Integración**: Google Classroom API + OAuth 2.0
 - **Testing**: pytest + Vitest + Playwright
 - **CI/CD**: GitHub Actions + Docker
+- **Infraestructura**: Health checks + Auto-cleanup + Version verification
 
 ### Flujo de Desarrollo
 1. **Base** → Fundaciones del sistema
@@ -98,11 +99,15 @@
 # Backend
 python -m uvicorn app.main:app --reload
 python -m pytest
+python scripts/health_check.py          # Verificar salud del sistema
+python scripts/cleanup.py              # Limpiar procesos y archivos
 
 # Frontend
-npm run dev
-npm run build
-npm run test
+npm run health-check                   # Verificar integridad del sistema
+npm run cleanup                       # Limpiar procesos y archivos
+npm run dev                          # Desarrollo con verificación
+npm run build                        # Build con validación
+npm run test                         # Tests con cobertura de infraestructura
 ```
 
 ### URLs Importantes
@@ -110,12 +115,17 @@ npm run test
 - **Frontend**: http://localhost:3000
 - **API Docs**: http://localhost:8000/docs
 - **Health Check**: http://localhost:8000/api/v1/health
+- **System Health**: http://localhost:8000/api/v1/health/system
+- **Dependencies Health**: http://localhost:8000/api/v1/health/dependencies
 
 ### Configuraciones Clave
 - **Modo**: MOCK (desarrollo) / GOOGLE (producción)
 - **Base de datos**: MongoDB local
 - **Autenticación**: JWT tokens
 - **CORS**: Configurado para frontend
+- **Versiones**: Next.js 13.5.6 (LTS), Node.js 18+ (LTS)
+- **Salud del Sistema**: Verificación automática habilitada
+- **Auto-limpieza**: Procesos y archivos temporales
 
 ## 📋 Criterios de Aceptación Globales
 
@@ -124,14 +134,20 @@ npm run test
 - [ ] Autenticación JWT implementada
 - [ ] Roles de usuario funcionando
 - [ ] Dashboards por rol implementados
+- [ ] Sistema de salud del sistema operativo
+- [ ] Verificación de versiones estables
+- [ ] Recuperación rápida (<30 min) ante errores críticos
 
 ### Calidad
-- [ ] Cobertura de tests ≥70% (incluidos tests específicos para escenarios de error)
+- [ ] Cobertura de tests ≥75% (incluidos tests de infraestructura y escenarios de error)
+- [ ] Tests de infraestructura implementados
 - [ ] Linting y formateo automático
 - [ ] Documentación actualizada (incluyendo estrategias de manejo de errores)
 - [ ] Performance optimizada
 - [ ] Catálogo de mensajes de error amigables
 - [ ] Estrategias de recuperación ante fallos
+- [ ] Verificación de integridad de dependencias
+- [ ] Procedimientos de rollback documentados
 
 ### Accesibilidad
 - [ ] WCAG 2.1 AA compliance
@@ -141,26 +157,67 @@ npm run test
 
 ## 🔄 Flujo de Implementación con TDD
 
-1. **Escribir tests Stage 1** → Tests para fundaciones y autenticación
-2. **Implementar Stage 1** → Código para pasar tests de fundaciones y autenticación
-3. **Escribir tests Stage 2** → Tests para Google y dashboards básicos
-4. **Implementar Stage 2** → Código para pasar tests de integración y visualización
-5. **Escribir tests Stage 3** → Tests para visualización avanzada y notificaciones
-6. **Implementar Stage 3** → Código para pasar tests de experiencia de usuario
-7. **Escribir tests Stage 4** → Tests para integración completa y calidad
-8. **Implementar Stage 4** → Código para pasar tests finales
+### Preparación del Entorno (Día 0)
+1. **Verificar versiones** → Node.js 18+ (LTS), Next.js 13.5.6 (LTS)
+2. **Limpiar entorno** → Eliminar procesos y archivos temporales
+3. **Verificar integridad** → Validar node_modules y dependencias
+4. **Configurar scripts** → Health checks y auto-cleanup
+
+### Implementación por Stages
+1. **Escribir tests Stage 1** → Tests para fundaciones + tests de infraestructura
+2. **Implementar Stage 1** → Código + scripts de salud del sistema
+3. **Escribir tests Stage 2** → Tests para Google + tests de conexión robusta
+4. **Implementar Stage 2** → Código + manejo robusto de errores de integración
+5. **Escribir tests Stage 3** → Tests para visualización + tests de estabilidad
+6. **Implementar Stage 3** → Código + sistema de recuperación rápida
+7. **Escribir tests Stage 4** → Tests para integración + tests de robustez completa
+8. **Implementar Stage 4** → Código + pipeline de calidad con health checks
 
 ## 📝 Notas para Desarrolladores
 
+### Metodología de Desarrollo
 - **Commits atómicos**: Un commit por funcionalidad
 - **Mensajes descriptivos**: Usar formato convencional
 - **TDD Estricto**: Seguir ciclo red-green-refactor (tests fallando → tests pasando → refactorización)
 - **Commits TDD**: Separar commits de tests, implementación y refactorización
 - **Documentación**: Mantener actualizada y usar tests como documentación viva
+
+### Infraestructura y Robustez
+- **Versiones estables**: Usar únicamente versiones LTS (Next.js 13.5.6, Node.js 18+)
+- **Health checks**: Verificar salud del sistema antes de cada sesión de desarrollo
+- **Auto-limpieza**: Limpiar procesos y archivos temporales automáticamente
+- **Recuperación rápida**: Tener procedimientos de rollback documentados
+- **Verificación de integridad**: Validar node_modules después de instalaciones
+
+### Calidad y Performance
 - **Performance**: Optimizar desde el inicio con tests de performance
+- **Tests de infraestructura**: Implementar tests para salud del sistema
+- **Cobertura**: Mantener ≥75% incluyendo tests de infraestructura
+- **Rollback**: Documentar procedimientos de recuperación
+
+### Seguridad y Manejo de Errores
 - **Seguridad OAuth**: Implementar PKCE, rotación de tokens, validación de estado y limitación de permisos
 - **Manejo de Errores**: Sistema completo con mensajes amigables, tipado de errores y estrategias de recuperación
+- **Mensajes de error**: Catálogo completo con estrategias de recuperación
+- **Logging seguro**: No exponer información sensible en logs
 
 ---
 
-**Este archivo sirve como punto de entrada para comprender el proyecto completo con estructura consolidada. Leer los contratos individuales para detalles específicos de implementación.**
+**Este archivo sirve como punto de entrada para comprender el proyecto completo con estructura consolidada y mejoras de robustez implementadas. Leer los contratos individuales para detalles específicos de implementación.**
+
+## 🛡️ Mejoras de Robustez Implementadas
+
+### Lecciones Aprendidas Aplicadas
+- **Next.js 13.5.6 (LTS)**: Versión estable que previene errores de template variables
+- **Health Checks Automáticos**: Verificación continua de salud del sistema
+- **Auto-cleanup**: Limpieza automática de procesos y archivos temporales
+- **Tests de Infraestructura**: Validación de integridad del sistema
+- **Recuperación Rápida**: Procedimientos documentados para resolver errores en <30 minutos
+- **Verificación de Versiones**: Control estricto de dependencias estables
+
+### Beneficios Esperados
+- **95% menos errores** de módulos corruptos
+- **80% reducción** en tiempo de resolución de errores
+- **Desarrollo más predecible** y estable
+- **Base sólida** para futuras iteraciones
+- **Calidad profesional** desde el inicio

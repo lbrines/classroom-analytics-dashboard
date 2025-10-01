@@ -19,13 +19,14 @@
 - Configurar testing básico (unitarios e integración)
 
 ### Frontend Fundacional
-- Configurar Next.js 15 con App Router + TypeScript
+- Configurar Next.js 13.5.6 (LTS) con App Router + TypeScript
 - Implementar estructura de componentes base
 - Crear sistema de autenticación frontend
 - Establecer comunicación con backend (API client)
 - Implementar layout responsivo con Tailwind CSS
 - Crear páginas principales (login, dashboard básico)
 - Implementar sistema de internacionalización (i18n) con inglés como idioma base
+- Configurar health checks y auto-cleanup para estabilidad
 
 ### Backend - Autenticación Avanzada
 - Implementar autenticación OAuth 2.0 con Google en Python usando HTTPS obligatorio
@@ -199,10 +200,12 @@ Cada componente y funcionalidad debe seguir este ciclo de desarrollo.
 
 ### Frontend - Funcionalidades Core
 1. **Configuración Base**
-   - Next.js 15 con App Router
+   - Next.js 13.5.6 (LTS) con App Router
    - TypeScript estricto
    - Tailwind CSS integrado
    - Configuración de ESLint y Prettier
+   - Health checks automáticos del sistema
+   - Auto-cleanup de procesos y archivos temporales
 
 2. **Sistema de Autenticación Completo**
    - Formulario de login responsivo
@@ -408,7 +411,7 @@ GET /api/v1/user/profile
 - [ ] Scripts de gestión de puertos funcionando
 
 ### Frontend
-- [ ] Next.js 15 configurado y funcionando en puerto 3000 (desarrollo)
+- [ ] Next.js 13.5.6 (LTS) configurado y funcionando en puerto 3000 (desarrollo)
 - [ ] Página de login responsiva y funcional
 - [ ] Flujo OAuth con Google implementado
 - [ ] Dashboard básico accesible post-login
@@ -422,6 +425,9 @@ GET /api/v1/user/profile
 - [ ] Tests de componentes básicos funcionando con Vitest y RTL
 - [ ] TypeScript sin errores
 - [ ] Variables de entorno configuradas por ambiente
+- [ ] Health checks del sistema funcionando
+- [ ] Auto-cleanup de procesos implementado
+- [ ] Recuperación rápida (<30 min) ante errores críticos
 
 ### Integración
 - [ ] Frontend y backend comunicándose correctamente
@@ -436,9 +442,12 @@ GET /api/v1/user/profile
 ### Criterios TDD
 - [ ] Tests unitarios escritos antes de la implementación de cada componente
 - [ ] Tests de integración escritos antes de conectar componentes
+- [ ] Tests de infraestructura implementados
 - [ ] Historial de commits muestra ciclo TDD (tests → implementación → refactor)
 - [ ] Documentación de decisiones de diseño basadas en tests
-- [ ] Cobertura de tests cumple con el mínimo requerido (≥70%)
+- [ ] Cobertura de tests cumple con el mínimo requerido (≥75%)
+- [ ] Verificación de integridad de dependencias
+- [ ] Procedimientos de rollback documentados
 
 ##############################################
 ## Configuración de Desarrollo
@@ -883,5 +892,9 @@ curl http://localhost:3000
 9. **Autenticación Dual**: Soportar tanto JWT como OAuth de manera coherente
 10. **Gestión de Puertos**: Implementar mejores prácticas de asignación y verificación
 11. **Simplicidad de Ambientes**: Mantener solo desarrollo y producción para reducir complejidad
+12. **Health Checks**: Verificación continua de salud del sistema
+13. **Auto-cleanup**: Limpieza automática de procesos y archivos temporales
+14. **Recuperación Rápida**: Procedimientos documentados para resolver errores en <30 minutos
+15. **Verificación de Versiones**: Validar versiones estables antes de desarrollo
 
 Este stage establece las fundaciones sólidas, el sistema de autenticación completo y las mejores prácticas de gestión de recursos con una configuración simplificada de dos ambientes para el resto del proyecto.
