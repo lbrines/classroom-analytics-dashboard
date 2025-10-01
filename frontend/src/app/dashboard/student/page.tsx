@@ -72,28 +72,40 @@ export default function StudentDashboard() {
             {/* Charts */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
               <ChartWidget title="Your Progress Over Time" loading={isLoading}>
-                <LineChart
-                  categories={['Week 1', 'Week 2', 'Week 3', 'Week 4']}
-                  series={[
-                    { name: 'Progress', data: [45, 60, 75, 85] },
-                    { name: 'Target', data: [50, 60, 70, 80] },
-                  ]}
-                  height={300}
-                  colors={['#3B82F6', '#10B981']}
-                />
+                {!isLoading && metrics ? (
+                  <LineChart
+                    categories={['Week 1', 'Week 2', 'Week 3', 'Week 4']}
+                    series={[
+                      { name: 'Progress', data: [45, 60, 75, 85] },
+                      { name: 'Target', data: [50, 60, 70, 80] },
+                    ]}
+                    height={300}
+                    colors={['#3B82F6', '#10B981']}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    {isLoading ? 'Loading...' : 'No data available'}
+                  </div>
+                )}
               </ChartWidget>
 
               <ChartWidget title="Assignment Status" loading={isLoading}>
-                <PieChart
-                  labels={['Completed', 'In Progress', 'Pending']}
-                  series={[
-                    metrics?.metrics?.completed_assignments || 28,
-                    8,
-                    metrics?.overview?.pending_assignments || 12
-                  ]}
-                  height={300}
-                  colors={['#10B981', '#F59E0B', '#EF4444']}
-                />
+                {!isLoading && metrics ? (
+                  <PieChart
+                    labels={['Completed', 'In Progress', 'Pending']}
+                    series={[
+                      metrics?.metrics?.completed_assignments || 28,
+                      8,
+                      metrics?.overview?.pending_assignments || 12
+                    ]}
+                    height={300}
+                    colors={['#10B981', '#F59E0B', '#EF4444']}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    {isLoading ? 'Loading...' : 'No data available'}
+                  </div>
+                )}
               </ChartWidget>
             </div>
 

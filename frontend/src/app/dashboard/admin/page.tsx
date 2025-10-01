@@ -75,25 +75,37 @@ export default function AdminDashboard() {
             {/* Charts */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
               <ChartWidget title="Course Performance" loading={isLoading}>
-                <BarChart
-                  categories={['eCommerce', 'Web Dev', 'Marketing']}
-                  series={[
-                    { name: 'Completion Rate', data: [85, 72, 68] },
-                    { name: 'Average Grade', data: [89, 85, 82] },
-                  ]}
-                  height={300}
-                />
+                {!isLoading && metrics ? (
+                  <BarChart
+                    categories={['eCommerce', 'Web Dev', 'Marketing']}
+                    series={[
+                      { name: 'Completion Rate', data: [85, 72, 68] },
+                      { name: 'Average Grade', data: [89, 85, 82] },
+                    ]}
+                    height={300}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    {isLoading ? 'Loading...' : 'No data available'}
+                  </div>
+                )}
               </ChartWidget>
 
               <ChartWidget title="Monthly Trends" loading={isLoading}>
-                <LineChart
-                  categories={['Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
-                  series={[
-                    { name: 'Enrollments', data: [45, 52, 48, 55, 60] },
-                    { name: 'Completions', data: [30, 35, 38, 42, 45] },
-                  ]}
-                  height={300}
-                />
+                {!isLoading && metrics ? (
+                  <LineChart
+                    categories={['Aug', 'Sep', 'Oct', 'Nov', 'Dec']}
+                    series={[
+                      { name: 'Enrollments', data: [45, 52, 48, 55, 60] },
+                      { name: 'Completions', data: [30, 35, 38, 42, 45] },
+                    ]}
+                    height={300}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    {isLoading ? 'Loading...' : 'No data available'}
+                  </div>
+                )}
               </ChartWidget>
             </div>
 
