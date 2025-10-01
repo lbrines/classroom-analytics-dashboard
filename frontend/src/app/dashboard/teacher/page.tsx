@@ -63,15 +63,21 @@ export default function TeacherDashboard() {
 
             {/* Charts */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
-              <ChartWidget title="Course Completion Rates" loading={isLoading}>
-                <BarChart
-                  categories={courses.slice(0, 3).map(c => c.name)}
-                  series={[
-                    { name: 'Completion', data: [85, 72, 68] },
-                  ]}
-                  height={300}
-                  colors={['#10B981']}
-                />
+              <ChartWidget title="Course Completion Rates" loading={isLoading || coursesLoading}>
+                {!coursesLoading && courses.length > 0 ? (
+                  <BarChart
+                    categories={courses.slice(0, 3).map(c => c.name)}
+                    series={[
+                      { name: 'Completion', data: [85, 72, 68] },
+                    ]}
+                    height={300}
+                    colors={['#10B981']}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    No data available
+                  </div>
+                )}
               </ChartWidget>
 
               <ChartWidget title="Grade Distribution" loading={isLoading}>
