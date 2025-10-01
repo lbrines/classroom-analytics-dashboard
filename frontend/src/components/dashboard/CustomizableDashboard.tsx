@@ -201,7 +201,7 @@ export function CustomizableDashboard({ userId, role }: CustomizableDashboardPro
           <div className="flex items-center space-x-2">
             <Button
               onClick={() => setIsEditing(!isEditing)}
-              variant={isEditing ? "default" : "outline"}
+              variant={isEditing ? "primary" : "outline"}
               size="sm"
             >
               {isEditing ? 'Exit Edit' : 'Edit Layout'}
@@ -226,7 +226,7 @@ export function CustomizableDashboard({ userId, role }: CustomizableDashboardPro
                 </Button>
                 <Button
                   onClick={saveLayout}
-                  variant="default"
+                  variant="primary"
                   size="sm"
                 >
                   Save Layout
@@ -262,7 +262,7 @@ export function CustomizableDashboard({ userId, role }: CustomizableDashboardPro
           <div className="flex items-center justify-center h-64 text-gray-500">
             <div className="text-center">
               <p className="text-lg mb-2">No widgets added yet</p>
-              <p className="text-sm">Click "Edit Layout" to add widgets to your dashboard</p>
+              <p className="text-sm">Click &quot;Edit Layout&quot; to add widgets to your dashboard</p>
             </div>
           </div>
         )}

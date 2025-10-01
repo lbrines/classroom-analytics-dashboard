@@ -6,7 +6,7 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
-import { useNotifications } from '@/hooks/useNotifications';
+import { useNotificationPreferences } from '@/hooks/useNotifications';
 
 interface NotificationPreferences {
   channels: {
@@ -33,7 +33,7 @@ interface NotificationPreferences {
 
 export default function NotificationPreferencesPage() {
   const { user } = useAuth();
-  const { preferences, updatePreferences, isLoading } = useNotifications();
+  const { preferences, updatePreferences, isLoading } = useNotificationPreferences();
   
   const [formData, setFormData] = useState<NotificationPreferences>({
     channels: {

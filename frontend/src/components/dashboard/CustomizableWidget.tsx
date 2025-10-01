@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 
@@ -44,7 +44,7 @@ export function CustomizableWidget({
     }
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (isResizing && widgetRef.current) {
       const rect = widgetRef.current.getBoundingClientRect();
       const newWidth = Math.max(200, e.clientX - rect.left);
@@ -55,13 +55,13 @@ export function CustomizableWidget({
         size: { width: newWidth, height: newHeight }
       });
     }
-  };
+  }, [isResizing, widget, onUpdate]);
 
   const handleMouseUp = () => {
     setIsResizing(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
@@ -70,7 +70,7 @@ export function CustomizableWidget({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isResizing]);
+  }, [isResizing, handleMouseMove]);
 
   const handleDragStart = (e: React.DragEvent) => {
     if (onDragStart) {

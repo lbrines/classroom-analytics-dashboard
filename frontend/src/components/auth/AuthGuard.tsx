@@ -47,7 +47,7 @@ export function AuthGuard({ children, requiredRole, fallback }: AuthGuardProps) 
         <div className="text-center">
           <h1 className="text-2xl font-bold text-error-600">Access Denied</h1>
           <p className="mt-2 text-sm text-secondary-600">
-            You don't have permission to access this page.
+            You don&apos;t have permission to access this page.
           </p>
         </div>
       </div>

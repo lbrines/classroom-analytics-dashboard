@@ -10,41 +10,29 @@ export function useTranslation() {
     // i18n is initialized in the imported config
   }, []);
 
-  try {
-    const { t, i18n } = useI18nTranslation();
+  // Always call the hook, but handle errors gracefully
+  const translationResult = useI18nTranslation();
+  
+  const changeLanguage = (language: string) => {
+    if (translationResult.i18n && translationResult.i18n.changeLanguage) {
+      translationResult.i18n.changeLanguage(language);
+    }
+  };
 
-    const changeLanguage = (language: string) => {
-      if (i18n && i18n.changeLanguage) {
-        i18n.changeLanguage(language);
-      }
-    };
+  const getCurrentLanguage = () => {
+    return translationResult.i18n?.language || 'en';
+  };
 
-    const getCurrentLanguage = () => {
-      return i18n?.language || 'en';
-    };
+  const isLanguageSupported = (language: string) => {
+    return translationResult.i18n?.hasResourceBundle ? translationResult.i18n.hasResourceBundle(language, 'translation') : false;
+  };
 
-    const isLanguageSupported = (language: string) => {
-      return i18n?.hasResourceBundle ? i18n.hasResourceBundle(language, 'translation') : false;
-    };
-
-    return {
-      t: t || ((key: string) => key), // Fallback to key if translation fails
-      changeLanguage,
-      getCurrentLanguage,
-      isLanguageSupported,
-      currentLanguage: i18n?.language || 'en',
-      isReady: i18n?.isInitialized || false,
-    };
-  } catch (error) {
-    // Fallback when i18next is not available
-    console.warn('i18next not available, using fallback translations');
-    return {
-      t: (key: string) => key,
-      changeLanguage: () => {},
-      getCurrentLanguage: () => 'en',
-      isLanguageSupported: () => false,
-      currentLanguage: 'en',
-      isReady: false,
-    };
-  }
+  return {
+    t: translationResult.t || ((key: string) => key), // Fallback to key if translation fails
+    changeLanguage,
+    getCurrentLanguage,
+    isLanguageSupported,
+    currentLanguage: translationResult.i18n?.language || 'en',
+    isReady: translationResult.i18n?.isInitialized || false,
+  };
 }
