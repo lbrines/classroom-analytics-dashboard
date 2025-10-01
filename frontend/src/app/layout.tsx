@@ -4,7 +4,12 @@ import './globals.css';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap', // Optimize font loading
+  preload: true,
+  adjustFontFallback: true,
+});
 
 export const metadata: Metadata = {
   title: 'Educational Dashboard',
@@ -28,13 +33,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" />
         {/* Prevent browser extension autofill overlays */}
         <meta name="autocomplete" content="off" />
+        <meta name="form-detection" content="off" />
       </head>
-      <body className={inter.className} data-autofill="off">
+      <body 
+        className={inter.className} 
+        data-autofill="off"
+        suppressHydrationWarning
+      >
         <QueryProvider>
           <AuthProvider>
             {children}
