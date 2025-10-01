@@ -7,20 +7,12 @@ import { ChartWidget } from '@/components/dashboard/ChartWidget';
 import { LineChart } from '@/components/charts/LineChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { useMetrics } from '@/hooks/useMetrics';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
   const { metrics, isLoading } = useMetrics();
 
-  // Redirect if not student
-  if (user && user.role !== 'student') {
-    window.location.href = '/dashboard';
-    return null;
-  }
-
   return (
-    <AuthGuard>
+    <AuthGuard requiredRole="student">
       <div className="min-h-screen bg-secondary-50">
         <DashboardHeader />
         

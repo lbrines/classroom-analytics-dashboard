@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/constants/api.constants';
 import { Course } from '@/types/course.types';
 
 export function useCourses() {
@@ -9,14 +10,16 @@ export function useCourses() {
     queryKey: ['courses'],
     queryFn: async () => {
       try {
-        const response = await apiClient.get('/courses');
+        const response = await apiClient.get(API_ENDPOINTS.COURSES);
         return (response.data as any).data as { courses: Course[]; total: number };
       } catch (err) {
         console.warn('Failed to fetch courses:', err);
-        return { courses: [], total: 0 };
+        throw err; // Re-throw to let React Query handle the error state
       }
     },
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   return {
@@ -32,7 +35,7 @@ export function useCourse(courseId: string) {
   const { data, isLoading, error } = useQuery({
     queryKey: ['course', courseId],
     queryFn: async () => {
-      const response = await apiClient.get(`/courses/${courseId}`);
+      const response = await apiClient.get(`${API_ENDPOINTS.COURSE}/${courseId}`);
       return (response.data as any).data as Course;
     },
     enabled: !!courseId,

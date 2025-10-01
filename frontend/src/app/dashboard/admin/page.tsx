@@ -8,20 +8,12 @@ import { BarChart } from '@/components/charts/BarChart';
 import { LineChart } from '@/components/charts/LineChart';
 import { Card, CardContent } from '@/components/ui/Card';
 import { useMetrics } from '@/hooks/useMetrics';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function AdminDashboard() {
-  const { user } = useAuth();
   const { metrics, isLoading } = useMetrics();
 
-  // Redirect if not admin
-  if (user && user.role !== 'administrator') {
-    window.location.href = '/dashboard';
-    return null;
-  }
-
   return (
-    <AuthGuard>
+    <AuthGuard requiredRole="administrator">
       <div className="min-h-screen bg-secondary-50">
         <DashboardHeader />
         

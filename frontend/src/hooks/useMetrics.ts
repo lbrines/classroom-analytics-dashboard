@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api';
+import { API_ENDPOINTS } from '@/constants/api.constants';
 import { DashboardMetrics } from '@/types/metrics.types';
 
 export function useMetrics() {
@@ -9,14 +10,16 @@ export function useMetrics() {
     queryKey: ['dashboard-metrics'],
     queryFn: async () => {
       try {
-        const response = await apiClient.get('/dashboard');
+        const response = await apiClient.get(API_ENDPOINTS.DASHBOARD);
         return (response.data as any).data as DashboardMetrics;
       } catch (err) {
         console.warn('Failed to fetch dashboard metrics:', err);
-        return null;
+        throw err; // Re-throw to let React Query handle the error state
       }
     },
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   return {
@@ -32,15 +35,17 @@ export function useRoleMetrics(role: string) {
     queryKey: ['dashboard-metrics', role],
     queryFn: async () => {
       try {
-        const response = await apiClient.get(`/dashboard/${role}`);
+        const response = await apiClient.get(`${API_ENDPOINTS.DASHBOARD_ROLE}/${role}`);
         return (response.data as any).data as DashboardMetrics;
       } catch (err) {
         console.warn('Failed to fetch role metrics:', err);
-        return null;
+        throw err; // Re-throw to let React Query handle the error state
       }
     },
     enabled: !!role,
     retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   return {

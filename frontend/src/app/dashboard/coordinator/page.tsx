@@ -9,20 +9,12 @@ import { LineChart } from '@/components/charts/LineChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { Card, CardContent } from '@/components/ui/Card';
 import { useMetrics } from '@/hooks/useMetrics';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function CoordinatorDashboard() {
-  const { user } = useAuth();
   const { metrics, isLoading } = useMetrics();
 
-  // Redirect if not coordinator
-  if (user && user.role !== 'coordinator') {
-    window.location.href = '/dashboard';
-    return null;
-  }
-
   return (
-    <AuthGuard>
+    <AuthGuard requiredRole="coordinator">
       <div className="min-h-screen bg-secondary-50">
         <DashboardHeader />
         

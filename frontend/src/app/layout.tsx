@@ -7,7 +7,7 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
 const inter = Inter({ 
   subsets: ['latin'],
   display: 'swap', // Optimize font loading
-  preload: true,
+  preload: false, // Disable preload to avoid unused resource warnings
   adjustFontFallback: true,
 });
 
@@ -39,6 +39,19 @@ export default function RootLayout({
         {/* Prevent browser extension autofill overlays */}
         <meta name="autocomplete" content="off" />
         <meta name="form-detection" content="off" />
+        <meta name="format-detection" content="telephone=no" />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            /* Hide browser extension overlays */
+            .bootstrap-autofill-overlay,
+            .autofill-overlay,
+            [data-autofill-overlay] {
+              display: none !important;
+              visibility: hidden !important;
+              pointer-events: none !important;
+            }
+          `
+        }} />
       </head>
       <body 
         className={inter.className} 

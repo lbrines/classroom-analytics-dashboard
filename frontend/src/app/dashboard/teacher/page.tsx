@@ -8,21 +8,13 @@ import { BarChart } from '@/components/charts/BarChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { useMetrics } from '@/hooks/useMetrics';
 import { useCourses } from '@/hooks/useCourses';
-import { useAuth } from '@/hooks/useAuth';
 
 export default function TeacherDashboard() {
-  const { user } = useAuth();
   const { metrics, isLoading } = useMetrics();
   const { courses, isLoading: coursesLoading } = useCourses();
 
-  // Redirect if not teacher
-  if (user && user.role !== 'teacher') {
-    window.location.href = '/dashboard';
-    return null;
-  }
-
   return (
-    <AuthGuard>
+    <AuthGuard requiredRole="teacher">
       <div className="min-h-screen bg-secondary-50">
         <DashboardHeader />
         

@@ -15,6 +15,28 @@ export const API_ENDPOINTS = {
   OAUTH_GOOGLE_CALLBACK: '/oauth/google/callback',
   OAUTH_GOOGLE_REVOKE: '/oauth/google/revoke',
   OAUTH_STATUS: '/oauth/status',
+  
+  // Dashboard
+  DASHBOARD: '/dashboard',
+  DASHBOARD_ROLE: '/dashboard',
+  
+  // Courses
+  COURSES: '/courses',
+  COURSE: '/courses',
+  COURSE_SYNC: '/sync',
+  
+  // Students
+  STUDENTS: '/students',
+  STUDENT: '/students',
+  
+  // Search
+  SEARCH: '/search',
+  
+  // Notifications
+  NOTIFICATIONS: '/notifications',
+  
+  // Reports
+  REPORTS: '/reports',
 } as const;
 
 export const HTTP_STATUS = {
