@@ -159,4 +159,69 @@ class NotificationService:
         )
         
         return notification
+    
+    def update_preferences(self, user_id: str, preferences_data: dict) -> bool:
+        """
+        Update notification preferences for a user.
+        
+        Args:
+            user_id: The user ID
+            preferences_data: Dictionary with preference updates
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            data = self._load_data()
+            
+            # Find existing preferences
+            prefs_found = False
+            for i, prefs_data in enumerate(data.get("preferences", [])):
+                if prefs_data.get("user_id") == user_id:
+                    # Update existing preferences
+                    if "channels" in preferences_data:
+                        prefs_data["channels"].update(preferences_data["channels"])
+                    if "types" in preferences_data:
+                        prefs_data["types"].update(preferences_data["types"])
+                    if "quiet_hours_enabled" in preferences_data:
+                        prefs_data["quiet_hours_enabled"] = preferences_data["quiet_hours_enabled"]
+                    if "quiet_hours_start" in preferences_data:
+                        prefs_data["quiet_hours_start"] = preferences_data["quiet_hours_start"]
+                    if "quiet_hours_end" in preferences_data:
+                        prefs_data["quiet_hours_end"] = preferences_data["quiet_hours_end"]
+                    prefs_found = True
+                    break
+            
+            if not prefs_found:
+                # Create new preferences
+                new_prefs = {
+                    "user_id": user_id,
+                    "channels": preferences_data.get("channels", {
+                        "in_app": True,
+                        "email": False,
+                        "telegram": False
+                    }),
+                    "types": preferences_data.get("types", {
+                        "assignment": True,
+                        "student_risk": True,
+                        "announcement": True,
+                        "grade": False,
+                        "system": True
+                    }),
+                    "quiet_hours_enabled": preferences_data.get("quiet_hours_enabled", False),
+                    "quiet_hours_start": preferences_data.get("quiet_hours_start", "22:00"),
+                    "quiet_hours_end": preferences_data.get("quiet_hours_end", "08:00")
+                }
+                
+                if "preferences" not in data:
+                    data["preferences"] = []
+                data["preferences"].append(new_prefs)
+            
+            # Save updated data (in a real implementation, this would be persisted)
+            self._data = data
+            return True
+            
+        except Exception as e:
+            print(f"Error updating preferences: {e}")
+            return False
 

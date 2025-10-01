@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.endpoints import auth, oauth, health, courses, students, dashboard, search, notifications, reports
+from app.api.endpoints import auth, oauth, health, courses, students, dashboard, search, notifications, reports, websocket, insights
 
 # Create main API router
 api_router = APIRouter()
@@ -14,3 +14,5 @@ api_router.include_router(dashboard.router, tags=["metrics"])
 api_router.include_router(search.router, tags=["search"])
 api_router.include_router(notifications.router, tags=["notifications"])
 api_router.include_router(reports.router, tags=["reports"])
+api_router.include_router(websocket.router, tags=["websocket"])
+api_router.include_router(insights.router, tags=["insights"])

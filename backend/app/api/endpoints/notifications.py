@@ -77,12 +77,7 @@ async def mark_notification_as_read(
     if not success:
         raise HTTPException(status_code=404, detail="Notification not found")
     
-    response_data = {
-        "notification_id": notification_id,
-        "status": "marked_as_read"
-    }
-    
-    return create_success_response(response_data).model_dump()
+    return create_success_response({"message": "Notification marked as read"}).model_dump()
 
 
 @router.get("/notifications/preferences", response_model=dict)
@@ -97,14 +92,23 @@ async def get_notification_preferences(
     """
     preferences = notification_service.get_preferences(current_user.id)
     
-    preferences_data = NotificationPreferencesResponse(
-        user_id=preferences.user_id,
-        channels=preferences.channels,
-        types=preferences.types,
-        quiet_hours_enabled=preferences.quiet_hours_enabled,
-        quiet_hours_start=preferences.quiet_hours_start,
-        quiet_hours_end=preferences.quiet_hours_end
-    ).model_dump()
-    
-    return create_success_response(preferences_data).model_dump()
+    return create_success_response(preferences.model_dump()).model_dump()
 
+
+@router.put("/notifications/preferences", response_model=dict)
+async def update_notification_preferences(
+    preferences_data: dict,
+    current_user: User = Depends(get_current_user),
+    notification_service: NotificationService = Depends(get_notification_service)
+):
+    """
+    Update notification preferences for current user.
+    
+    Requires authentication.
+    """
+    success = notification_service.update_preferences(current_user.id, preferences_data)
+    
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to update preferences")
+    
+    return create_success_response({"message": "Preferences updated successfully"}).model_dump()

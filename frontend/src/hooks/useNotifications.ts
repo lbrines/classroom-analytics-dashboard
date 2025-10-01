@@ -56,3 +56,42 @@ export function useNotifications(unreadOnly: boolean = false) {
   };
 }
 
+export function useNotificationPreferences() {
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['notification-preferences'],
+    queryFn: async () => {
+      try {
+        const response = await apiClient.get(`/notifications/preferences`);
+        return (response.data as any).data;
+      } catch (err) {
+        console.warn('Failed to fetch notification preferences:', err);
+        return null;
+      }
+    },
+    retry: false,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const updatePreferencesMutation = useMutation({
+    mutationFn: async (preferences: any) => {
+      const response = await apiClient.put(`/notifications/preferences`, preferences);
+      return (response.data as any).data;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch preferences
+      queryClient.invalidateQueries({ queryKey: ['notification-preferences'] });
+    },
+  });
+
+  return {
+    preferences: data,
+    isLoading,
+    error,
+    updatePreferences: updatePreferencesMutation.mutateAsync,
+    isUpdating: updatePreferencesMutation.isPending,
+    refetch,
+  };
+}
+
