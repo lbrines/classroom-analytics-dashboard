@@ -8,9 +8,15 @@ export function useCourses() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['courses'],
     queryFn: async () => {
-      const response = await apiClient.get('/courses');
-      return (response.data as any).data as { courses: Course[]; total: number };
+      try {
+        const response = await apiClient.get('/courses');
+        return (response.data as any).data as { courses: Course[]; total: number };
+      } catch (err) {
+        console.warn('Failed to fetch courses:', err);
+        return { courses: [], total: 0 };
+      }
     },
+    retry: false,
   });
 
   return {

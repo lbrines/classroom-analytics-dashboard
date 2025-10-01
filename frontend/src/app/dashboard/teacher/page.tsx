@@ -64,7 +64,7 @@ export default function TeacherDashboard() {
             {/* Charts */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-8">
               <ChartWidget title="Course Completion Rates" loading={isLoading || coursesLoading}>
-                {!coursesLoading && courses.length > 0 ? (
+                {!coursesLoading && !isLoading && courses.length > 0 ? (
                   <BarChart
                     categories={courses.slice(0, 3).map(c => c.name)}
                     series={[
@@ -75,17 +75,23 @@ export default function TeacherDashboard() {
                   />
                 ) : (
                   <div className="h-[300px] flex items-center justify-center text-secondary-500">
-                    No data available
+                    {isLoading || coursesLoading ? 'Loading...' : 'No data available'}
                   </div>
                 )}
               </ChartWidget>
 
               <ChartWidget title="Grade Distribution" loading={isLoading}>
-                <PieChart
-                  labels={['A (9-10)', 'B (7-8.9)', 'C (5-6.9)', 'D (<5)']}
-                  series={[35, 45, 15, 5]}
-                  height={300}
-                />
+                {!isLoading && metrics ? (
+                  <PieChart
+                    labels={['A (9-10)', 'B (7-8.9)', 'C (5-6.9)', 'D (<5)']}
+                    series={[35, 45, 15, 5]}
+                    height={300}
+                  />
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-secondary-500">
+                    {isLoading ? 'Loading...' : 'No data available'}
+                  </div>
+                )}
               </ChartWidget>
             </div>
 
