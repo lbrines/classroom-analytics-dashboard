@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -7,12 +8,17 @@ import { getInitials } from '@/lib/utils';
 export function DashboardHeader() {
   const { user, logout } = useAuth();
   const { t } = useTranslation();
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
       await logout();
+      // Redirect to login after successful logout
+      router.push('/login');
     } catch (error) {
       console.error('Logout failed:', error);
+      // Redirect anyway to ensure user is sent to login
+      router.push('/login');
     }
   };
 
