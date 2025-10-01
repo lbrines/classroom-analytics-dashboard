@@ -8,7 +8,7 @@ export function useMetrics() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['dashboard-metrics'],
     queryFn: async () => {
-      const response = await apiClient.get('/metrics/dashboard');
+      const response = await apiClient.get('/dashboard');
       return (response.data as any).data as DashboardMetrics;
     },
   });
@@ -25,7 +25,7 @@ export function useRoleMetrics(role: string) {
   const { data, isLoading, error } = useQuery({
     queryKey: ['dashboard-metrics', role],
     queryFn: async () => {
-      const response = await apiClient.get(`/metrics/dashboard/${role}`);
+      const response = await apiClient.get(`/dashboard/${role}`);
       return (response.data as any).data as DashboardMetrics;
     },
     enabled: !!role,
